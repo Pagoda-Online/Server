@@ -1,19 +1,19 @@
 var express = require("express");
 var router = express.Router();
-const DonateController = require("../../controllers/donate.controller");
+const RegisterEventController = require("../../controllers/registerEvent.controller");
 // const { isLoggedIn } = require("../../middlewares/authMiddleware");
-// const { canDeleteDonate } = require("../../permissions/Donate");
+// const { canDeleteRegisterEvent } = require("../../permissions/RegisterEvent");
 /**
  * @swagger
- * /api/Donates:
+ * /api/RegisterEvents:
  *   get:
  *     tags:
- *       - Donate
+ *       - RegisterEvent
  *     summary: Retrieve a list of JSONPlaceholder users.
  *     description: Retrieve a list of users from JSONPlaceholder. Can be used to populate a list of fake users when prototyping or testing an API.
  *     responses:
  *       200:
- *         description: A list of Donates.
+ *         description: A list of RegisterEvents.
  *         content:
  *           application/json:
  *             schema:
@@ -29,19 +29,19 @@ const DonateController = require("../../controllers/donate.controller");
  *                    type: number
  */
 
-router.get("/", DonateController.getAllDonates);
+router.get("/", RegisterEventController.getAllRegisterEvents);
 
 /**
  * @swagger
- * /api/Donate/:id:
+ * /api/RegisterEvent/:id:
  *   get:
  *     tags:
- *       - Donate
+ *       - RegisterEvent
  *     summary: Retrieve a list of JSONPlaceholder users.
  *     description: Retrieve a list of users from JSONPlaceholder. Can be used to populate a list of fake users when prototyping or testing an API.
  *     responses:
  *       200:
- *         description: A list of Donates.
+ *         description: A list of RegisterEvents.
  *         content:
  *           application/json:
  *             schema:
@@ -57,8 +57,12 @@ router.get("/", DonateController.getAllDonates);
  *                    type: number
  */
 
-router.get("/:id", DonateController.getDonate);
+router.get("/:id", RegisterEventController.getRegisterEvent);
 
-router.post("/create", DonateController.createDonate);
+router.post("/create", RegisterEventController.createRegisterEvent);
+
+router.delete("/delete/:id", RegisterEventController.deleteRegisterEvent);
+
+// router.put("/edit/:id", RegisterEventController.updateRegisterEvent);
 
 module.exports = router;

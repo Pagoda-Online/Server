@@ -3,16 +3,19 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 
 const { Schema } = mongoose;
 
-const CourseSchema = new Schema({
-  UserId: { type: mongoose.Types.ObjectId, ref: "User" },
-  title: String,
-  Description: String,
-  UrlFileImage: String,
-  UrlFileAttach: String,
-  UrlVideo: String,
-});
+const CourseSchema = new Schema(
+  {
+    UserId: { type: mongoose.Types.ObjectId, ref: "User" },
+    title: String,
+    Description: String,
+    UrlFileImage: String,
+    UrlFileAttach: String,
+    UrlVideo: String,
+  },
+  { timestamps: true }
+);
 
-DonateSchema.plugin(mongoosePaginate);
+CourseSchema.plugin(mongoosePaginate);
 
 // tạo model
 const Course = mongoose.model("Course", CourseSchema);

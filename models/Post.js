@@ -3,14 +3,16 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 
 const { Schema } = mongoose;
 
-const PostSchema = new Schema({
-  UserId: { type: mongoose.Types.ObjectId, ref: "User" },
-  CommentId: { type: mongoose.Types.ObjectId, ref: "Comment" },
-  PostTitle: String,
-  PostDescr: String,
-  UrlImagePath: String,
-  UrlFileAttach: String,
-});
+const PostSchema = new Schema(
+  {
+    UserId: { type: mongoose.Types.ObjectId, ref: "User" },
+    PostTitle: String,
+    PostDesc: String,
+    UrlImagePath: String,
+    UrlFileAttach: String,
+  },
+  { timestamps: true }
+);
 
 PostSchema.plugin(mongoosePaginate);
 

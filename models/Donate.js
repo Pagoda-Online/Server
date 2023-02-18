@@ -3,11 +3,14 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 
 const { Schema } = mongoose;
 
-const DonateSchema = new Schema({
-  UserId: { type: mongoose.Types.ObjectId, ref: "User" },
-  DonateMoney: Number,
-  Description: String,
-});
+const DonateSchema = new Schema(
+  {
+    UserId: { type: mongoose.Types.ObjectId, ref: "User" },
+    DonateMoney: Number,
+    Description: String,
+  },
+  { timestamps: true }
+);
 
 DonateSchema.plugin(mongoosePaginate);
 

@@ -13,6 +13,13 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/api/users");
 var donateRouter = require("./routes/api/donate");
 var authRouter = require("./routes/api/auth");
+var courseRouter = require("./routes/api/course");
+var eventRouter = require("./routes/api/event");
+var registerEventRouter = require("./routes/api/registerEvent");
+var registerCourseRouter = require("./routes/api/registerCourse");
+var postRouter = require("./routes/api/post");
+var commentRouter = require("./routes/api/comment");
+var FollowerRouter = require("./routes/api/follower");
 
 const { isLoggedIn } = require("./middlewares/authMiddleware");
 
@@ -44,7 +51,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: "http://localhost:3000",
+      url: "http://localhost:3001",
       description: "Development server",
     },
   ],
@@ -61,7 +68,14 @@ const swaggerSpec = swaggerJSDoc(options);
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/donates", donateRouter);
+app.use("/courses", courseRouter);
+app.use("/events", eventRouter);
 app.use("/auth", authRouter);
+app.use("/register-event", registerEventRouter);
+app.use("/register-course", registerCourseRouter);
+app.use("/posts", postRouter);
+app.use("/followers", FollowerRouter);
+app.use("/comments", commentRouter);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 (async () => {

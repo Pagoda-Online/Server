@@ -1,19 +1,19 @@
 var express = require("express");
 var router = express.Router();
-const DonateController = require("../../controllers/donate.controller");
+const FollowerController = require("../../controllers/follower.controller");
 // const { isLoggedIn } = require("../../middlewares/authMiddleware");
-// const { canDeleteDonate } = require("../../permissions/Donate");
+// const { canDeleteFollower } = require("../../permissions/Follower");
 /**
  * @swagger
- * /api/Donates:
+ * /api/Followers:
  *   get:
  *     tags:
- *       - Donate
+ *       - Follower
  *     summary: Retrieve a list of JSONPlaceholder users.
  *     description: Retrieve a list of users from JSONPlaceholder. Can be used to populate a list of fake users when prototyping or testing an API.
  *     responses:
  *       200:
- *         description: A list of Donates.
+ *         description: A list of Followers.
  *         content:
  *           application/json:
  *             schema:
@@ -29,19 +29,19 @@ const DonateController = require("../../controllers/donate.controller");
  *                    type: number
  */
 
-router.get("/", DonateController.getAllDonates);
+router.get("/", FollowerController.getAllFollowers);
 
 /**
  * @swagger
- * /api/Donate/:id:
+ * /api/Follower/:id:
  *   get:
  *     tags:
- *       - Donate
+ *       - Follower
  *     summary: Retrieve a list of JSONPlaceholder users.
  *     description: Retrieve a list of users from JSONPlaceholder. Can be used to populate a list of fake users when prototyping or testing an API.
  *     responses:
  *       200:
- *         description: A list of Donates.
+ *         description: A list of Followers.
  *         content:
  *           application/json:
  *             schema:
@@ -57,8 +57,12 @@ router.get("/", DonateController.getAllDonates);
  *                    type: number
  */
 
-router.get("/:id", DonateController.getDonate);
+router.get("/:id", FollowerController.getFollower);
 
-router.post("/create", DonateController.createDonate);
+router.post("/create", FollowerController.createFollower);
+
+router.delete("/delete/:id", FollowerController.deleteFollower);
+
+router.put("/edit/:id", FollowerController.updateFollower);
 
 module.exports = router;
