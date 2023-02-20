@@ -21,7 +21,11 @@ var postRouter = require("./routes/api/post");
 var commentRouter = require("./routes/api/comment");
 var FollowerRouter = require("./routes/api/follower");
 
-const { isLoggedIn } = require("./middlewares/authMiddleware");
+const {
+  isLoggedIn,
+  isAdmin,
+  isStaff,
+} = require("./middlewares/authMiddleware");
 
 var app = express();
 
@@ -66,17 +70,17 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/donates", donateRouter);
-app.use("/courses", courseRouter);
-app.use("/events", eventRouter);
+app.use("/users-management", isLoggedIn, isAdmin, usersRouter);
+app.use("/donates", isLoggedIn, donateRouter);
+app.use("/courses", isLoggedIn, isStaff, courseRouter);
+app.use("/events", isLoggedIn, isStaff, eventRouter);
 app.use("/auth", authRouter);
-app.use("/register-event", registerEventRouter);
-app.use("/register-course", registerCourseRouter);
-app.use("/posts", postRouter);
-app.use("/followers", FollowerRouter);
-app.use("/comments", commentRouter);
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/register-event", isLoggedIn, registerEventRouter);
+app.use("/register-course", isLoggedIn, registerCourseRouter);
+app.use("/posts", isLoggedIn, postRouter);
+app.use("/followers", isLoggedIn, FollowerRouter);
+app.use("/comments", isLoggedIn, commentRouter);
+app.use("/docs", isLoggedIn, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 (async () => {
   /* … */
