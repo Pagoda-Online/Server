@@ -2,7 +2,6 @@ var express = require("express");
 var router = express.Router();
 const CourseController = require("../../controllers/course.controller");
 // const { isLoggedIn } = require("../../middlewares/authMiddleware");
-// const { canDeleteCourse } = require("../../permissions/Course");
 /**
  * @swagger
  * /api/Courses:
