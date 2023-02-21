@@ -1,13 +1,9 @@
 const jwt = require("jsonwebtoken");
-const { ADMIN_ROLE, USER_ROLE, STAFF_ROLE } = require("../constansts/role");
+const { ADMIN_ROLE, STAFF_ROLE } = require("../constansts/role");
 
 const isLoggedIn = async (req, res, next) => {
   try {
     const token = req.cookies.access_token || req.headers.access_token;
-    console.log(
-      "🚀 ~ file: authMiddleware.js ~ line 6 ~ isLoggedIn ~ token",
-      token
-    );
 
     if (!token) return res.status(400).send("Haven't logged in yet !!!");
 
@@ -58,10 +54,7 @@ const isStaff = async (req, res, next) => {
   try {
     const token = req.cookies.access_token || req.headers.access_token;
 
-    const { email, role, fullname } = await jwt.verify(
-      token,
-      process.env.SECRET_KEY
-    );
+    const role = await jwt.verify(token, process.env.SECRET_KEY);
 
     if (role != STAFF_ROLE)
       return res.status(400).send("You are not Staff !!!");

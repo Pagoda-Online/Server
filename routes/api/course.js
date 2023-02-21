@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const CourseController = require("../../controllers/course.controller");
+const CourseController = require("../../controllers/staff/course.controller");
 // const { isLoggedIn } = require("../../middlewares/authMiddleware");
 /**
  * @swagger

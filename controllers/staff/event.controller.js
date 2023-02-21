@@ -1,4 +1,4 @@
-const EventServices = require("../services/event.service");
+const EventServices = require("../../services/event.service");
 
 const getAllEvents = async (req, res, next) => {
   const { page = 1, limit = 5 } = req.query;

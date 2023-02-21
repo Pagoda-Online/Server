@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const EventController = require("../../controllers/event.controller");
+const EventController = require("../../controllers/staff/event.controller");
 // const { isLoggedIn } = require("../../middlewares/authMiddleware");
 // const { canDeleteEvent } = require("../../permissions/Event");
 /**

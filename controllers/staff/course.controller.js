@@ -1,4 +1,4 @@
-const CourseServices = require("../services/course.service");
+const CourseServices = require("../../services/course.service");
 
 const getAllCourses = async (req, res, next) => {
   const { page = 1, limit = 5 } = req.query;
