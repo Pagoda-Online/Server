@@ -82,7 +82,7 @@ app.use("/register-course", isLoggedIn, registerCourseRouter);
 app.use("/posts", isLoggedIn, postRouter);
 app.use("/followers", isLoggedIn, FollowerRouter);
 app.use("/comments", isLoggedIn, commentRouter);
-app.use("/docs", isLoggedIn, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 (async () => {
   /* … */
