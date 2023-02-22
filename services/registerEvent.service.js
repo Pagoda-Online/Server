@@ -1,9 +1,9 @@
 const RegisterEventRepository = require("../repository/registerEvent.repository");
 
-const getAllRegisterEvents = async (options) => {
+const getAllRegisterEvents = async (UserId) => {
   try {
     const RegisterEvent = await RegisterEventRepository.findAllRegisterEvent(
-      options
+      UserId
     );
     return RegisterEvent;
   } catch (error) {

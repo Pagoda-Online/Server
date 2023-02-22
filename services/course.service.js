@@ -1,8 +1,20 @@
 const CourseRepository = require("../repository/course.repository");
 
-const getAllCourses = async (options) => {
+const getAllCourses = async (UserId) => {
   try {
-    const Course = await CourseRepository.findAllCourse(options);
+    const Course = await CourseRepository.findAllCourse(UserId);
+    return Course;
+  } catch (error) {
+    console.log(
+      "🚀 ~ file: Courseervices.js ~ line 25 ~ getAllCourse ~ error",
+      error
+    );
+  }
+};
+
+const getAllCoursesForAdmin = async () => {
+  try {
+    const Course = await CourseRepository.getAllCoursesForAdmin();
     return Course;
   } catch (error) {
     console.log(
@@ -63,4 +75,5 @@ module.exports = {
   createCourse,
   deleteCourseById,
   updateCourseById,
+  getAllCoursesForAdmin,
 };

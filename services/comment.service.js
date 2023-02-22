@@ -1,8 +1,8 @@
 const CommentRepository = require("../repository/comment.repository");
 
-const getAllComments = async (options) => {
+const getAllComments = async (UserId) => {
   try {
-    const Comment = await CommentRepository.findAllComment(options);
+    const Comment = await CommentRepository.findAllComment(UserId);
     return Comment;
   } catch (error) {
     console.log(

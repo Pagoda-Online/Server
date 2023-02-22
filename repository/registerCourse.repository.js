@@ -1,8 +1,8 @@
 const RegisterCourseModel = require("../models/RegisterCourse");
 
-const findAllRegisterCourse = async (options) => {
+const findAllRegisterCourse = async (UserId) => {
   try {
-    const registerCourses = await RegisterCourseModel.paginate({}, options);
+    const registerCourses = await RegisterCourseModel.find({ UserId: UserId });
     return registerCourses;
   } catch (error) {
     console.log(

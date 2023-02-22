@@ -1,9 +1,16 @@
-const CourseServices = require("../../services/course.service");
+const CourseServices = require("../services/course.service");
+const jwt = require("jsonwebtoken");
 
 const getAllCourses = async (req, res, next) => {
-  const { page = 1, limit = 5 } = req.query;
+  const token = req.cookies.access_token || req.headers.access_token;
+  const UserId = await jwt.verify(token, process.env.SECRET_KEY);
 
-  const Courses = await CourseServices.getAllCourses({ page, limit });
+  const Courses = await CourseServices.getAllCourses(UserId);
+  res.send(Courses);
+};
+
+const getAllCoursesForAdmin = async (req, res, next) => {
+  const Courses = await CourseServices.getAllCoursesForAdmin();
   res.send(Courses);
 };
 
@@ -23,6 +30,10 @@ const createCourse = async (req, res, next) => {
   try {
     // GET : req.params, req.query
     if (!req.body) return res.sendStatus(400);
+
+    const token = req.cookies.access_token || req.headers.access_token;
+    const UserId = await jwt.verify(token, process.env.SECRET_KEY);
+    req.body.UserId = UserId;
 
     const Course = await CourseServices.createCourse(req.body);
 
@@ -87,4 +98,5 @@ module.exports = {
   createCourse,
   deleteCourse,
   updateCourse,
+  getAllCoursesForAdmin,
 };

@@ -12,16 +12,15 @@ const { google } = require("googleapis");
 const database = require("./database/connect");
 
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/api/users");
 var donateRouter = require("./routes/api/donate");
 var authRouter = require("./routes/api/auth");
-var courseRouter = require("./routes/api/course");
-var eventRouter = require("./routes/api/event");
 var registerEventRouter = require("./routes/api/registerEvent");
 var registerCourseRouter = require("./routes/api/registerCourse");
 var postRouter = require("./routes/api/post");
 var commentRouter = require("./routes/api/comment");
 var FollowerRouter = require("./routes/api/follower");
+var StaffRouter = require("./routes/api/staff");
+var AdminRouter = require("./routes/api/admin");
 
 const {
   isLoggedIn,
@@ -72,16 +71,18 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 app.use("/", indexRouter);
-app.use("/users-management", isLoggedIn, isAdmin, usersRouter);
-app.use("/donates", isLoggedIn, donateRouter);
-app.use("/courses", isLoggedIn, isStaff, courseRouter);
-app.use("/events", isLoggedIn, isStaff, eventRouter);
 app.use("/auth", authRouter);
+app.use("/donates", isLoggedIn, donateRouter);
 app.use("/register-event", isLoggedIn, registerEventRouter);
 app.use("/register-course", isLoggedIn, registerCourseRouter);
 app.use("/posts", isLoggedIn, postRouter);
 app.use("/followers", isLoggedIn, FollowerRouter);
 app.use("/comments", isLoggedIn, commentRouter);
+
+app.use("/admin", isLoggedIn, isAdmin, AdminRouter);
+
+app.use("/staff", isLoggedIn, isStaff, StaffRouter);
+
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 (async () => {

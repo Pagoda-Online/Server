@@ -1,8 +1,20 @@
 const CourseModel = require("../models/Course");
 
-const findAllCourse = async (options) => {
+const findAllCourse = async (UserId) => {
   try {
-    const courses = await CourseModel.paginate({}, options);
+    const courses = await CourseModel.find({ UserId: UserId });
+    return courses;
+  } catch (error) {
+    console.log(
+      "🚀 ~ file: CourseRepository.js ~ line 25 ~ findAll ~ error",
+      error
+    );
+  }
+};
+
+const getAllCoursesForAdmin = async () => {
+  try {
+    const courses = await CourseModel.find();
     return courses;
   } catch (error) {
     console.log(
@@ -63,4 +75,5 @@ module.exports = {
   createCourse,
   deleteCourseById,
   updateCourseById,
+  getAllCoursesForAdmin,
 };

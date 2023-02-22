@@ -29,7 +29,7 @@ const FollowerController = require("../../controllers/follower.controller");
  *                    type: number
  */
 
-router.get("/", FollowerController.getAllFollowers);
+router.get("/", FollowerController.getAllFollowing);
 
 /**
  * @swagger
@@ -56,6 +56,8 @@ router.get("/", FollowerController.getAllFollowers);
  *                  price:
  *                    type: number
  */
+
+router.get("/followed", FollowerController.getAllFollowers);
 
 router.get("/:id", FollowerController.getFollower);
 

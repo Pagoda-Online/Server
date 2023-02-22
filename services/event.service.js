@@ -1,8 +1,20 @@
 const EventRepository = require("../repository/event.repository");
 
-const getAllEvents = async (options) => {
+const getAllEvents = async (UserId) => {
   try {
-    const Event = await EventRepository.findAllEvent(options);
+    const Event = await EventRepository.findAllEvent(UserId);
+    return Event;
+  } catch (error) {
+    console.log(
+      "🚀 ~ file: Eventervices.js ~ line 25 ~ getAllEvent ~ error",
+      error
+    );
+  }
+};
+
+const getAllEventsForAdmin = async () => {
+  try {
+    const Event = await EventRepository.getAllEventsForAdmin();
     return Event;
   } catch (error) {
     console.log(
@@ -63,4 +75,5 @@ module.exports = {
   createEvent,
   deleteEventById,
   updateEventById,
+  getAllEventsForAdmin,
 };
