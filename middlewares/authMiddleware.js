@@ -1,10 +1,13 @@
 const jwt = require("jsonwebtoken");
 const { ADMIN_ROLE, STAFF_ROLE } = require("../constansts/role");
+const { decodeToken } = require("../utils/jwt");
 
 const isLoggedIn = async (req, res, next) => {
   try {
     const token = req.cookies.access_token || req.headers.access_token;
+
     if (!token) return res.status(400).send("Haven't logged in yet !!!");
+
     next();
   } catch (error) {
     console.log(
@@ -19,15 +22,9 @@ const isLoggedIn = async (req, res, next) => {
 const isAdmin = async (req, res, next) => {
   try {
     const token = req.cookies.access_token || req.headers.access_token;
+    const payload = decodeToken(token);
 
-    const {
-      _id: UsedId,
-      email: UserEmail,
-      role,
-      fullname,
-    } = await jwt.verify(token, process.env.SECRET_KEY);
-
-    if (role != ADMIN_ROLE)
+    if (payload.role != ADMIN_ROLE)
       return res.status(400).send("You are not Admin !!!");
 
     next();
@@ -44,15 +41,9 @@ const isAdmin = async (req, res, next) => {
 const isStaff = async (req, res, next) => {
   try {
     const token = req.cookies.access_token || req.headers.access_token;
+    const payload = decodeToken(token);
 
-    const {
-      _id: UsedId,
-      email: UserEmail,
-      role,
-      fullname,
-    } = await jwt.verify(token, process.env.SECRET_KEY);
-
-    if (role != STAFF_ROLE)
+    if (payload.role != STAFF_ROLE)
       return res.status(400).send("You are not Staff !!!");
 
     next();

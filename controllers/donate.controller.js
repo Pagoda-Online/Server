@@ -1,19 +1,19 @@
 const DonateServices = require("../services/donate.service");
-const jwt = require("jsonwebtoken");
+const { decodeToken } = require("../utils/jwt");
 
 const getAllDonates = async (req, res, next) => {
   const token = req.cookies.access_token || req.headers.access_token;
-  const UserId = await jwt.verify(token, process.env.SECRET_KEY);
+  const payload = decodeToken(token);
 
-  const Donates = await DonateServices.getAllDonates(UserId);
+  const Donates = await DonateServices.getAllDonates(payload._id);
   res.send(Donates);
 };
 
 const getAllDonatesReceive = async (req, res, next) => {
   const token = req.cookies.access_token || req.headers.access_token;
-  const UserId = await jwt.verify(token, process.env.SECRET_KEY);
+  const payload = decodeToken(token);
 
-  const Donates = await DonateServices.getAllDonatesReceived(UserId);
+  const Donates = await DonateServices.getAllDonatesReceived(payload._id);
   res.send(Donates);
 };
 
@@ -35,8 +35,8 @@ const createDonate = async (req, res, next) => {
     if (!req.body) return res.sendStatus(400);
 
     const token = req.cookies.access_token || req.headers.access_token;
-    const UserId = await jwt.verify(token, process.env.SECRET_KEY);
-    req.body.UserId = UserId;
+    const payload = decodeToken(token);
+    req.body.UserId = payload._id;
 
     const Donate = await DonateServices.createDonate(req.body);
 

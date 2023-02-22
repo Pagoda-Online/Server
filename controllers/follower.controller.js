@@ -1,21 +1,19 @@
 const FollowerServices = require("../services/follower.service");
-const jwt = require("jsonwebtoken");
+const { decodeToken } = require("../utils/jwt");
 
 const getAllFollowers = async (req, res, next) => {
-  // const { page = 1, limit = 5 } = req.query;
   const token = req.cookies.access_token || req.headers.access_token;
-  const UserId = await jwt.verify(token, process.env.SECRET_KEY);
+  const payload = decodeToken(token);
 
-  const Followers = await FollowerServices.getAllFollowers(UserId);
+  const Followers = await FollowerServices.getAllFollowers(payload._id);
   res.send(Followers);
 };
 
 const getAllFollowing = async (req, res, next) => {
-  // const { page = 1, limit = 5 } = req.query;
   const token = req.cookies.access_token || req.headers.access_token;
-  const UserId = await jwt.verify(token, process.env.SECRET_KEY);
+  const payload = decodeToken(token);
 
-  const Followers = await FollowerServices.getAllFollowing(UserId);
+  const Followers = await FollowerServices.getAllFollowing(payload._id);
   res.send(Followers);
 };
 
@@ -37,8 +35,8 @@ const createFollower = async (req, res, next) => {
     if (!req.body) return res.sendStatus(400);
 
     const token = req.cookies.access_token || req.headers.access_token;
-    const UserId = await jwt.verify(token, process.env.SECRET_KEY);
-    req.body.userFollowing_id = UserId;
+    const payload = decodeToken(token);
+    req.body.userFollowing_id = payload._id;
 
     const Follower = await FollowerServices.createFollower(req.body);
 

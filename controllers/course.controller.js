@@ -1,11 +1,11 @@
 const CourseServices = require("../services/course.service");
-const jwt = require("jsonwebtoken");
+const { decodeToken } = require("../utils/jwt");
 
 const getAllCourses = async (req, res, next) => {
   const token = req.cookies.access_token || req.headers.access_token;
-  const UserId = await jwt.verify(token, process.env.SECRET_KEY);
+  const payload = decodeToken(token);
 
-  const Courses = await CourseServices.getAllCourses(UserId);
+  const Courses = await CourseServices.getAllCourses(payload._id);
   res.send(Courses);
 };
 
@@ -32,8 +32,8 @@ const createCourse = async (req, res, next) => {
     if (!req.body) return res.sendStatus(400);
 
     const token = req.cookies.access_token || req.headers.access_token;
-    const UserId = await jwt.verify(token, process.env.SECRET_KEY);
-    req.body.UserId = UserId;
+    const payload = decodeToken(token);
+    req.body.UserId = payload._id;
 
     const Course = await CourseServices.createCourse(req.body);
 

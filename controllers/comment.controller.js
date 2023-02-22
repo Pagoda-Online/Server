@@ -1,12 +1,11 @@
 const CommentServices = require("../services/comment.service");
-const jwt = require("jsonwebtoken");
+const { decodeToken } = require("../utils/jwt");
 
 const getAllComments = async (req, res, next) => {
-  // const { page = 1, limit = 5 } = req.query;
   const token = req.cookies.access_token || req.headers.access_token;
-  const UserId = await jwt.verify(token, process.env.SECRET_KEY);
+  const payload = decodeToken(token);
 
-  const Comments = await CommentServices.getAllComments(UserId);
+  const Comments = await CommentServices.getAllComments(payload._id);
   res.send(Comments);
 };
 
@@ -28,8 +27,8 @@ const createComment = async (req, res, next) => {
     if (!req.body) return res.sendStatus(400);
 
     const token = req.cookies.access_token || req.headers.access_token;
-    const UserId = await jwt.verify(token, process.env.SECRET_KEY);
-    req.body.UserId = UserId;
+    const payload = decodeToken(token);
+    req.body.UserId = payload._id;
 
     const Comment = await CommentServices.createComment(req.body);
 
