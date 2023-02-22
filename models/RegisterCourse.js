@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 
 const RegisterCourseSchema = new Schema(
   {
-    idUser: { type: mongoose.Types.ObjectId, ref: "User" },
+    UserId: { type: mongoose.Types.ObjectId, ref: "User" },
     idCourse: { type: mongoose.Types.ObjectId, ref: "Course" },
   },
   { timestamps: true }

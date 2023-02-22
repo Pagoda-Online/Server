@@ -1,8 +1,20 @@
 const PostRepository = require("../repository/post.repository");
 
-const getAllPosts = async (options) => {
+const getAllPosts = async (UserId) => {
   try {
-    const Post = await PostRepository.findAllPost(options);
+    const Post = await PostRepository.findAllPost(UserId);
+    return Post;
+  } catch (error) {
+    console.log(
+      "🚀 ~ file: Postervices.js ~ line 25 ~ getAllPost ~ error",
+      error
+    );
+  }
+};
+
+const getAllPostsForAdmin = async () => {
+  try {
+    const Post = await PostRepository.findAllPostForAdmin();
     return Post;
   } catch (error) {
     console.log(
@@ -63,4 +75,5 @@ module.exports = {
   createPost,
   deletePostById,
   updatePostById,
+  getAllPostsForAdmin,
 };

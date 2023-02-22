@@ -1,8 +1,20 @@
 const EventModel = require("../models/Event");
 
-const findAllEvent = async (options) => {
+const findAllEvent = async (UserId) => {
   try {
-    const events = await EventModel.paginate({}, options);
+    const events = await EventModel.find({ UserId: UserId });
+    return events;
+  } catch (error) {
+    console.log(
+      "🚀 ~ file: EventRepository.js ~ line 25 ~ findAll ~ error",
+      error
+    );
+  }
+};
+
+const getAllEventsForAdmin = async () => {
+  try {
+    const events = await EventModel.find();
     return events;
   } catch (error) {
     console.log(
@@ -63,4 +75,5 @@ module.exports = {
   createEvent,
   deleteEventById,
   updateEventById,
+  getAllEventsForAdmin,
 };

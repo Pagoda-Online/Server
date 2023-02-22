@@ -1,12 +1,13 @@
 const RegisterCourseServices = require("../services/registerCourse.service");
+const { decodeToken } = require("../utils/jwt");
 
 const getAllRegisterCourses = async (req, res, next) => {
-  const { page = 1, limit = 5 } = req.query;
+  const token = req.cookies.access_token || req.headers.access_token;
+  const payload = decodeToken(token);
 
-  const RegisterCourses = await RegisterCourseServices.getAllRegisterCourses({
-    page,
-    limit,
-  });
+  const RegisterCourses = await RegisterCourseServices.getAllRegisterCourses(
+    payload._id
+  );
   res.send(RegisterCourses);
 };
 
@@ -29,6 +30,10 @@ const createRegisterCourse = async (req, res, next) => {
   try {
     // GET : req.params, req.query
     if (!req.body) return res.sendStatus(400);
+
+    const token = req.cookies.access_token || req.headers.access_token;
+    const payload = decodeToken(token);
+    req.body.UserId = payload._id;
 
     const RegisterCourse = await RegisterCourseServices.createRegisterCourse(
       req.body

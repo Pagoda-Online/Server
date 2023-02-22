@@ -6,6 +6,7 @@ const { Schema } = mongoose;
 const DonateSchema = new Schema(
   {
     UserId: { type: mongoose.Types.ObjectId, ref: "User" },
+    UserReceive: { type: mongoose.Types.ObjectId, ref: "User" },
     DonateMoney: Number,
     Description: String,
   },

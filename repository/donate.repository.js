@@ -1,8 +1,20 @@
 const DonateModel = require("../models/Donate");
 
-const findAllDonate = async (options) => {
+const findAllDonate = async (UserId) => {
   try {
-    const donates = await DonateModel.paginate({}, options);
+    const donates = await DonateModel.find({ UserId: UserId });
+    return donates;
+  } catch (error) {
+    console.log(
+      "🚀 ~ file: DonateRepository.js ~ line 25 ~ findAll ~ error",
+      error
+    );
+  }
+};
+
+const findAllDonateReceive = async (UserId) => {
+  try {
+    const donates = await DonateModel.find({ UserReceive: UserId });
     return donates;
   } catch (error) {
     console.log(
@@ -40,4 +52,5 @@ module.exports = {
   findAllDonate,
   findDonateById,
   createDonate,
+  findAllDonateReceive,
 };

@@ -1,8 +1,8 @@
 const CommentModel = require("../models/Comment");
 
-const findAllComment = async (options) => {
+const findAllComment = async (UserId) => {
   try {
-    const Comments = await CommentModel.paginate({}, options);
+    const Comments = await CommentModel.find({ UserId: UserId });
     return Comments;
   } catch (error) {
     console.log(

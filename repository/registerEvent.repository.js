@@ -1,8 +1,8 @@
 const RegisterEventModel = require("../models/RegisterEvent");
 
-const findAllRegisterEvent = async (options) => {
+const findAllRegisterEvent = async (UserId) => {
   try {
-    const registerEvents = await RegisterEventModel.paginate({}, options);
+    const registerEvents = await RegisterEventModel.find({ UserId: UserId });
     return registerEvents;
   } catch (error) {
     console.log(

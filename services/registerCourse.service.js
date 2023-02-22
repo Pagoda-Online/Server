@@ -1,9 +1,9 @@
 const RegisterCourseRepository = require("../repository/registerCourse.repository");
 
-const getAllRegisterCourses = async (options) => {
+const getAllRegisterCourses = async (UserId) => {
   try {
     const RegisterCourse = await RegisterCourseRepository.findAllRegisterCourse(
-      options
+      UserId
     );
     return RegisterCourse;
   } catch (error) {

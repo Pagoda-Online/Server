@@ -1,9 +1,19 @@
 const FollowerServices = require("../services/follower.service");
+const { decodeToken } = require("../utils/jwt");
 
 const getAllFollowers = async (req, res, next) => {
-  const { page = 1, limit = 5 } = req.query;
+  const token = req.cookies.access_token || req.headers.access_token;
+  const payload = decodeToken(token);
 
-  const Followers = await FollowerServices.getAllFollowers({ page, limit });
+  const Followers = await FollowerServices.getAllFollowers(payload._id);
+  res.send(Followers);
+};
+
+const getAllFollowing = async (req, res, next) => {
+  const token = req.cookies.access_token || req.headers.access_token;
+  const payload = decodeToken(token);
+
+  const Followers = await FollowerServices.getAllFollowing(payload._id);
   res.send(Followers);
 };
 
@@ -23,6 +33,10 @@ const createFollower = async (req, res, next) => {
   try {
     // GET : req.params, req.query
     if (!req.body) return res.sendStatus(400);
+
+    const token = req.cookies.access_token || req.headers.access_token;
+    const payload = decodeToken(token);
+    req.body.userFollowing_id = payload._id;
 
     const Follower = await FollowerServices.createFollower(req.body);
 
@@ -87,4 +101,5 @@ module.exports = {
   createFollower,
   deleteFollower,
   updateFollower,
+  getAllFollowing,
 };

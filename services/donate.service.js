@@ -1,8 +1,20 @@
 const DonateRepository = require("../repository/donate.repository");
 
-const getAllDonates = async (options) => {
+const getAllDonates = async (UserId) => {
   try {
-    const Donate = await DonateRepository.findAllDonate(options);
+    const Donate = await DonateRepository.findAllDonate(UserId);
+    return Donate;
+  } catch (error) {
+    console.log(
+      "🚀 ~ file: Donateervices.js ~ line 25 ~ getAllDonate ~ error",
+      error
+    );
+  }
+};
+
+const getAllDonatesReceived = async (UserId) => {
+  try {
+    const Donate = await DonateRepository.findAllDonateReceive(UserId);
     return Donate;
   } catch (error) {
     console.log(
@@ -40,4 +52,5 @@ module.exports = {
   getAllDonates,
   getDonateById,
   createDonate,
+  getAllDonatesReceived,
 };

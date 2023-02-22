@@ -37,9 +37,9 @@ const login = async (req, res, next) => {
 
     if (!isValidPassword) return res.status(401).send("Password is not valid");
 
-    const { email: userEmail, role, fullname } = foundUser;
+    const { _id: UserId, email: userEmail, role, fullname } = foundUser;
 
-    const payload = { email: userEmail, role, fullname };
+    const payload = { _id: UserId, email: userEmail, role, fullname };
 
     const token = await createToken(payload);
 

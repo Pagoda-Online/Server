@@ -1,9 +1,15 @@
 const EventServices = require("../services/event.service");
+const { decodeToken } = require("../utils/jwt");
 
 const getAllEvents = async (req, res, next) => {
-  const { page = 1, limit = 5 } = req.query;
+  const token = req.cookies.access_token || req.headers.access_token;
+  const payload = decodeToken(token);
+  const Events = await EventServices.getAllEvents(payload._id);
+  res.send(Events);
+};
 
-  const Events = await EventServices.getAllEvents({ page, limit });
+const getAllEventsForAdmin = async (req, res, next) => {
+  const Events = await EventServices.getAllEventsForAdmin();
   res.send(Events);
 };
 
@@ -23,6 +29,10 @@ const createEvent = async (req, res, next) => {
   try {
     // GET : req.params, req.query
     if (!req.body) return res.sendStatus(400);
+
+    const token = req.cookies.access_token || req.headers.access_token;
+    const payload = decodeToken(token);
+    req.body.UserId = payload._id;
 
     const Event = await EventServices.createEvent(req.body);
 
@@ -87,4 +97,5 @@ module.exports = {
   createEvent,
   deleteEvent,
   updateEvent,
+  getAllEventsForAdmin,
 };

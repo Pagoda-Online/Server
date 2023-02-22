@@ -1,8 +1,20 @@
 const PostModel = require("../models/Post");
 
-const findAllPost = async (options) => {
+const findAllPost = async (UserId) => {
   try {
-    const Posts = await PostModel.paginate({}, options);
+    const Posts = await PostModel.find({ UserId: UserId });
+    return Posts;
+  } catch (error) {
+    console.log(
+      "🚀 ~ file: PostRepository.js ~ line 25 ~ findAll ~ error",
+      error
+    );
+  }
+};
+
+const findAllPostForAdmin = async () => {
+  try {
+    const Posts = await PostModel.find();
     return Posts;
   } catch (error) {
     console.log(
@@ -63,4 +75,5 @@ module.exports = {
   createPost,
   deletePostById,
   updatePostById,
+  findAllPostForAdmin,
 };

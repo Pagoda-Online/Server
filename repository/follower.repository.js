@@ -1,8 +1,20 @@
 const FollowerModel = require("../models/Follower");
 
-const findAllFollower = async (options) => {
+const findAllFollower = async (UserId) => {
   try {
-    const Followers = await FollowerModel.paginate({}, options);
+    const Followers = await FollowerModel.find({ userFollowed_id: UserId });
+    return Followers;
+  } catch (error) {
+    console.log(
+      "🚀 ~ file: FollowerRepository.js ~ line 25 ~ findAll ~ error",
+      error
+    );
+  }
+};
+
+const findAllFollowing = async (UserId) => {
+  try {
+    const Followers = await FollowerModel.find({ userFollowing_id: UserId });
     return Followers;
   } catch (error) {
     console.log(
@@ -63,4 +75,5 @@ module.exports = {
   createFollower,
   deleteFollowerById,
   updateFollowerById,
+  findAllFollowing,
 };

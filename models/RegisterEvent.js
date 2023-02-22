@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 
 const RegisterEventSchema = new Schema(
   {
-    idUser: { type: mongoose.Types.ObjectId, ref: "User" },
+    UserId: { type: mongoose.Types.ObjectId, ref: "User" },
     idEvent: { type: mongoose.Types.ObjectId, ref: "Event" },
   },
   { timestamps: true }
