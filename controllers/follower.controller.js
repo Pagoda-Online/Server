@@ -2,7 +2,8 @@ const FollowerServices = require("../services/follower.service");
 const { decodeToken } = require("../utils/jwt");
 
 const getAllFollowers = async (req, res, next) => {
-  const token = req.cookies.access_token || req.headers.access_token;
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
 
   const Followers = await FollowerServices.getAllFollowers(payload._id);
@@ -10,7 +11,8 @@ const getAllFollowers = async (req, res, next) => {
 };
 
 const getAllFollowing = async (req, res, next) => {
-  const token = req.cookies.access_token || req.headers.access_token;
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
 
   const Followers = await FollowerServices.getAllFollowing(payload._id);
@@ -34,7 +36,8 @@ const createFollower = async (req, res, next) => {
     // GET : req.params, req.query
     if (!req.body) return res.sendStatus(400);
 
-    const token = req.cookies.access_token || req.headers.access_token;
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
     const payload = decodeToken(token);
     req.body.userFollowing_id = payload._id;
 

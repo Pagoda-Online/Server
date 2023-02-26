@@ -2,7 +2,8 @@ const EventServices = require("../services/event.service");
 const { decodeToken } = require("../utils/jwt");
 
 const getAllEvents = async (req, res, next) => {
-  const token = req.cookies.access_token || req.headers.access_token;
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
   const Events = await EventServices.getAllEvents(payload._id);
   res.send(Events);
@@ -30,7 +31,8 @@ const createEvent = async (req, res, next) => {
     // GET : req.params, req.query
     if (!req.body) return res.sendStatus(400);
 
-    const token = req.cookies.access_token || req.headers.access_token;
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
     const payload = decodeToken(token);
     req.body.UserId = payload._id;
 

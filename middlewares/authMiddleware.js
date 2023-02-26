@@ -4,7 +4,8 @@ const { decodeToken } = require("../utils/jwt");
 
 const isLoggedIn = async (req, res, next) => {
   try {
-    const token = req.cookies.access_token || req.headers.access_token;
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) return res.status(400).send("Haven't logged in yet !!!");
 
@@ -21,7 +22,8 @@ const isLoggedIn = async (req, res, next) => {
 
 const isAdmin = async (req, res, next) => {
   try {
-    const token = req.cookies.access_token || req.headers.access_token;
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
     const payload = decodeToken(token);
 
     if (payload.role != ADMIN_ROLE)
@@ -40,7 +42,8 @@ const isAdmin = async (req, res, next) => {
 
 const isStaff = async (req, res, next) => {
   try {
-    const token = req.cookies.access_token || req.headers.access_token;
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
     const payload = decodeToken(token);
 
     if (payload.role != STAFF_ROLE)

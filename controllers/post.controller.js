@@ -2,7 +2,8 @@ const PostServices = require("../services/post.service");
 const { decodeToken } = require("../utils/jwt");
 
 const getAllPosts = async (req, res, next) => {
-  const token = req.cookies.access_token || req.headers.access_token;
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
   const Posts = await PostServices.getAllPosts(payload._id);
   res.send(Posts);
@@ -29,7 +30,8 @@ const createPost = async (req, res, next) => {
   try {
     // GET : req.params, req.query
     if (!req.body) return res.sendStatus(400);
-    const token = req.cookies.access_token || req.headers.access_token;
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
     const payload = decodeToken(token);
     req.body.UserId = payload._id;
 

@@ -9,7 +9,6 @@ const OtpSchema = new Schema({
     unique: true,
   },
   VerificationCode: { type: String, required: true },
-  isUsed: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now, expires: 3600 },
 });
 

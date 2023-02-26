@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const { User } = require("../models/User");
 const { hashPassword } = require("../utils/bcrypt");
 
 const createAccount = async (req, res, next) => {
@@ -58,7 +58,11 @@ const getAllUser = async (req, res, next) => {
     const users = await User.find({});
     return res.status(200).json(users);
   } catch (error) {
-    console.log("🚀 ~ file: auth.js ~ line 19 ~ router.post ~ error", error);
+    console.log(
+      "🚀 ~ file: user.controller.js:61 ~ getAllUser ~ error:",
+      error
+    );
+
     next(error);
   }
 };

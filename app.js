@@ -72,16 +72,23 @@ const swaggerSpec = swaggerJSDoc(options);
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
+
 app.use("/donates", isLoggedIn, donateRouter);
 app.use("/register-event", isLoggedIn, registerEventRouter);
 app.use("/register-course", isLoggedIn, registerCourseRouter);
 app.use("/posts", isLoggedIn, postRouter);
 app.use("/followers", isLoggedIn, FollowerRouter);
 app.use("/comments", isLoggedIn, commentRouter);
-
 app.use("/admin", isLoggedIn, isAdmin, AdminRouter);
-
 app.use("/staff", isLoggedIn, isStaff, StaffRouter);
+// app.use("/donates", donateRouter);
+// app.use("/register-event", registerEventRouter);
+// app.use("/register-course", registerCourseRouter);
+// app.use("/posts", postRouter);
+// app.use("/followers", FollowerRouter);
+// app.use("/comments", commentRouter);
+// app.use("/admin", AdminRouter);
+// app.use("/staff", StaffRouter);
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

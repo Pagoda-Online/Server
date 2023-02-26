@@ -107,9 +107,9 @@ const login = async (req, res, next) => {
 
     const token = await createToken(payload);
 
-    res.cookie("access_token", token, {
-      httpOnly: true,
-    });
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    // });
 
     return res
       .status(200)
