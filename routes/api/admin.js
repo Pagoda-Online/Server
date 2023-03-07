@@ -10,9 +10,17 @@ router.get("/users/:id", UserController.getUserById);
 
 router.get("/users", UserController.getAllUser);
 
-router.post("/users/create", UserController.createAccount);
+router.post("/users", UserController.createAccount);
 
 router.put("/users/update/:id", UserController.updateAccount);
+
+router.delete("/users/delete/:id", UserController.deleteAccount);
+
+router.post("/users/email", UserController.sendMail);
+
+router.put("/users/activation", UserController.activeAccount);
+
+router.put("/users/deactivation", UserController.inactiveAccount);
 
 // POST ROUTERS
 router.get("/posts", PostController.getAllPostsForAdmin);

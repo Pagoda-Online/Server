@@ -1,4 +1,4 @@
-const DonateServices = require("../services/donate.service");
+const DonateRepository = require("../repository/donate.repository");
 const { decodeToken } = require("../utils/jwt");
 
 const getAllDonates = async (req, res, next) => {
@@ -6,7 +6,7 @@ const getAllDonates = async (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
 
-  const Donates = await DonateServices.getAllDonates(payload._id);
+  const Donates = await DonateRepository.getAllDonates(payload._id);
   res.send(Donates);
 };
 
@@ -15,14 +15,14 @@ const getAllDonatesReceive = async (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
 
-  const Donates = await DonateServices.getAllDonatesReceived(payload._id);
+  const Donates = await DonateRepository.getAllDonatesReceived(payload._id);
   res.send(Donates);
 };
 
 const getDonate = async (req, res, next) => {
   const id = req.params.id;
 
-  const Donate = await DonateServices.getDonateById(id);
+  const Donate = await DonateRepository.getDonateById(id);
 
   if (!Donate) res.sendStatus(400);
 
@@ -41,7 +41,7 @@ const createDonate = async (req, res, next) => {
     const payload = decodeToken(token);
     req.body.UserId = payload._id;
 
-    const Donate = await DonateServices.createDonate(req.body);
+    const Donate = await DonateRepository.createDonate(req.body);
 
     if (!Donate) return res.sendStatus(500);
 

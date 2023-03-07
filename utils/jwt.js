@@ -10,38 +10,14 @@ const createToken = (payload) => {
       throw new Error("SECRET_KEY phải có độ dài 32 byte");
     }
 
-    // Mã hóa payload bằng thuật toán AES-256-CBC
-    const cipher = crypto.createCipheriv(algorithm, process.env.SECRET_KEY, iv);
-    let encryptedPayload = cipher.update(
-      JSON.stringify(payload),
-      "utf8",
-      "hex"
-    );
-    encryptedPayload += cipher.final("hex");
-
-    // Tạo phần payload của JWT
-    const payloadJwt = { data: encryptedPayload, iv: iv.toString("hex") };
-
-    const token = jwt.sign(payloadJwt, process.env.SECRET_KEY, {
+    const token = jwt.sign(payload, process.env.SECRET_KEY, {
       expiresIn: 86400, // 24 hours
     });
-
     return token;
   } catch (error) {
     console.log("🚀 ~ file: jwt.js:21 ~ createToken ~ error:", error);
     return error;
   }
-};
-
-const decryptPayload = (encryptedPayload, iv) => {
-  const decipher = crypto.createDecipheriv(
-    algorithm,
-    process.env.SECRET_KEY,
-    Buffer.from(iv, "hex")
-  );
-  let decryptedPayload = decipher.update(encryptedPayload, "hex", "utf8");
-  decryptedPayload += decipher.final("utf8");
-  return decryptedPayload;
 };
 
 const decodeToken = (token) => {
@@ -50,10 +26,11 @@ const decodeToken = (token) => {
       return res.send("Don't have access token");
     }
     const decoded = jwt.decode(token, { complete: true });
-    const iv = decoded.payload.iv;
-    const encryptedPayload = decoded.payload.data;
-    const decryptedPayload = decryptPayload(encryptedPayload, iv);
-    const payload = JSON.parse(decryptedPayload);
+    // const iv = decoded.payload.iv;
+    // const encryptedPayload = decoded.payload.data;
+    // const decryptedPayload = decryptPayload(encryptedPayload, iv);
+    // const payload = JSON.parse(decryptedPayload);
+    const payload = decoded.payload;
     return payload;
   } catch (error) {
     console.log("Error decoding token:", error);

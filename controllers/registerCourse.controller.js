@@ -1,4 +1,4 @@
-const RegisterCourseServices = require("../services/registerCourse.service");
+const RegisterCourseRepository = require("../repository/registerCourse.repository");
 const { decodeToken } = require("../utils/jwt");
 
 const getAllRegisterCourses = async (req, res, next) => {
@@ -6,7 +6,7 @@ const getAllRegisterCourses = async (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
 
-  const RegisterCourses = await RegisterCourseServices.getAllRegisterCourses(
+  const RegisterCourses = await RegisterCourseRepository.getAllRegisterCourses(
     payload._id
   );
   res.send(RegisterCourses);
@@ -15,7 +15,9 @@ const getAllRegisterCourses = async (req, res, next) => {
 const getRegisterCourse = async (req, res, next) => {
   const id = req.params.id;
 
-  const RegisterCourse = await RegisterCourseServices.getRegisterCourseById(id);
+  const RegisterCourse = await RegisterCourseRepository.getRegisterCourseById(
+    id
+  );
 
   if (!RegisterCourse) res.sendStatus(400);
 
@@ -37,7 +39,7 @@ const createRegisterCourse = async (req, res, next) => {
     const payload = decodeToken(token);
     req.body.UserId = payload._id;
 
-    const RegisterCourse = await RegisterCourseServices.createRegisterCourse(
+    const RegisterCourse = await RegisterCourseRepository.createRegisterCourse(
       req.body
     );
 
@@ -59,7 +61,7 @@ const deleteRegisterCourse = async (req, res, next) => {
     if (!req.params.id) return res.sendStatus(400);
 
     const RegisterCourse =
-      await RegisterCourseServices.deleteRegisterCourseById(req.params.id);
+      await RegisterCourseRepository.deleteRegisterCourseById(req.params.id);
 
     if (!RegisterCourse) return res.sendStatus(500);
 
@@ -80,7 +82,7 @@ const updateRegisterCourse = async (req, res, next) => {
     if (!req.params.id && req.body) return res.sendStatus(400);
 
     const RegisterCourse =
-      await RegisterCourseServices.updateRegisterCourseById(
+      await RegisterCourseRepository.updateRegisterCourseById(
         { _id: req.params.id },
         { $set: req.body }
       );

@@ -1,4 +1,4 @@
-const RegisterEventServices = require("../services/registerEvent.service");
+const RegisterEventRepository = require("../repository/registerEvent.repository");
 const { decodeToken } = require("../utils/jwt");
 
 const getAllRegisterEvents = async (req, res, next) => {
@@ -6,7 +6,7 @@ const getAllRegisterEvents = async (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
 
-  const RegisterEvents = await RegisterEventServices.getAllRegisterEvents(
+  const RegisterEvents = await RegisterEventRepository.getAllRegisterEvents(
     payload._id
   );
   res.send(RegisterEvents);
@@ -15,7 +15,7 @@ const getAllRegisterEvents = async (req, res, next) => {
 const getRegisterEvent = async (req, res, next) => {
   const id = req.params.id;
 
-  const RegisterEvent = await RegisterEventServices.getRegisterEventById(id);
+  const RegisterEvent = await RegisterEventRepository.getRegisterEventById(id);
 
   if (!RegisterEvent) res.sendStatus(400);
 
@@ -36,7 +36,7 @@ const createRegisterEvent = async (req, res, next) => {
     const token = authHeader && authHeader.split(" ")[1];
     const payload = decodeToken(token);
     req.body.UserId = payload._id;
-    const RegisterEvent = await RegisterEventServices.createRegisterEvent(
+    const RegisterEvent = await RegisterEventRepository.createRegisterEvent(
       req.body
     );
 
@@ -57,7 +57,7 @@ const deleteRegisterEvent = async (req, res, next) => {
     // DELETE : req.params, req.query
     if (!req.params.id) return res.sendStatus(400);
 
-    const RegisterEvent = await RegisterEventServices.deleteRegisterEventById(
+    const RegisterEvent = await RegisterEventRepository.deleteRegisterEventById(
       req.params.id
     );
 
@@ -79,7 +79,7 @@ const updateRegisterEvent = async (req, res, next) => {
     // UPDATE : req.params, req.query
     if (!req.params.id && req.body) return res.sendStatus(400);
 
-    const RegisterEvent = await RegisterEventServices.updateRegisterEventById(
+    const RegisterEvent = await RegisterEventRepository.updateRegisterEventById(
       { _id: req.params.id },
       { $set: req.body }
     );

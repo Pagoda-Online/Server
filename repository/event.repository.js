@@ -14,7 +14,11 @@ const findAllEvent = async (UserId) => {
 
 const getAllEventsForAdmin = async () => {
   try {
-    const events = await EventModel.find();
+    const events = await EventModel.find().populate("UserId");
+    console.log(
+      "🚀 ~ file: event.repository.js:18 ~ getAllEventsForAdmin ~ events:",
+      events
+    );
     return events;
   } catch (error) {
     console.log(

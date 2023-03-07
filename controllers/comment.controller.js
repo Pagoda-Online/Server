@@ -1,4 +1,4 @@
-const CommentServices = require("../services/comment.service");
+const CommentRepository = require("../repository/comment.repository");
 const { decodeToken } = require("../utils/jwt");
 
 const getAllComments = async (req, res, next) => {
@@ -6,14 +6,14 @@ const getAllComments = async (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
 
-  const Comments = await CommentServices.getAllComments(payload._id);
+  const Comments = await CommentRepository.getAllComments(payload._id);
   res.send(Comments);
 };
 
 const getComment = async (req, res, next) => {
   const id = req.params.id;
 
-  const Comment = await CommentServices.getCommentById(id);
+  const Comment = await CommentRepository.getCommentById(id);
 
   if (!Comment) res.sendStatus(400);
 
@@ -32,7 +32,7 @@ const createComment = async (req, res, next) => {
     const payload = decodeToken(token);
     req.body.UserId = payload._id;
 
-    const Comment = await CommentServices.createComment(req.body);
+    const Comment = await CommentRepository.createComment(req.body);
 
     if (!Comment) return res.sendStatus(500);
 
@@ -51,7 +51,7 @@ const deleteComment = async (req, res, next) => {
     // DELETE : req.params, req.query
     if (!req.params.id) return res.sendStatus(400);
 
-    const Comment = await CommentServices.deleteCommentById(req.params.id);
+    const Comment = await CommentRepository.deleteCommentById(req.params.id);
 
     if (!Comment) return res.sendStatus(500);
 
@@ -71,7 +71,7 @@ const updateComment = async (req, res, next) => {
     // UPDATE : req.params, req.query
     if (!req.params.id && req.body) return res.sendStatus(400);
 
-    const Comment = await CommentServices.updateCommentById(
+    const Comment = await CommentRepository.updateCommentById(
       { _id: req.params.id },
       { $set: req.body }
     );

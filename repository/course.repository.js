@@ -14,7 +14,7 @@ const findAllCourse = async (UserId) => {
 
 const getAllCoursesForAdmin = async () => {
   try {
-    const courses = await CourseModel.find();
+    const courses = await CourseModel.find().populate("UserId");
     return courses;
   } catch (error) {
     console.log(

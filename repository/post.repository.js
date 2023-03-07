@@ -12,9 +12,9 @@ const findAllPost = async (UserId) => {
   }
 };
 
-const findAllPostForAdmin = async () => {
+const getAllPostsForAdmin = async () => {
   try {
-    const Posts = await PostModel.find();
+    const Posts = await PostModel.find().populate("UserId");
     return Posts;
   } catch (error) {
     console.log(
@@ -75,5 +75,5 @@ module.exports = {
   createPost,
   deletePostById,
   updatePostById,
-  findAllPostForAdmin,
+  getAllPostsForAdmin,
 };

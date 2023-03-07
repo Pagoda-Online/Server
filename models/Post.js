@@ -9,7 +9,6 @@ const PostSchema = new Schema(
     PostTitle: String,
     PostDesc: String,
     UrlImagePath: String,
-    UrlFileAttach: String,
   },
   { timestamps: true }
 );
@@ -17,6 +16,6 @@ const PostSchema = new Schema(
 PostSchema.plugin(mongoosePaginate);
 
 // tạo model
-const Post = mongoose.model("Role", PostSchema);
+const Post = mongoose.model("Post", PostSchema);
 
 module.exports = Post;

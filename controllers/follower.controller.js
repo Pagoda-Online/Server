@@ -1,4 +1,4 @@
-const FollowerServices = require("../services/follower.service");
+const FollowerRepository = require("../repository/follower.repository");
 const { decodeToken } = require("../utils/jwt");
 
 const getAllFollowers = async (req, res, next) => {
@@ -6,7 +6,7 @@ const getAllFollowers = async (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
 
-  const Followers = await FollowerServices.getAllFollowers(payload._id);
+  const Followers = await FollowerRepository.getAllFollowers(payload._id);
   res.send(Followers);
 };
 
@@ -15,14 +15,14 @@ const getAllFollowing = async (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
 
-  const Followers = await FollowerServices.getAllFollowing(payload._id);
+  const Followers = await FollowerRepository.getAllFollowing(payload._id);
   res.send(Followers);
 };
 
 const getFollower = async (req, res, next) => {
   const id = req.params.id;
 
-  const Follower = await FollowerServices.getFollowerById(id);
+  const Follower = await FollowerRepository.getFollowerById(id);
 
   if (!Follower) res.sendStatus(400);
 
@@ -41,7 +41,7 @@ const createFollower = async (req, res, next) => {
     const payload = decodeToken(token);
     req.body.userFollowing_id = payload._id;
 
-    const Follower = await FollowerServices.createFollower(req.body);
+    const Follower = await FollowerRepository.createFollower(req.body);
 
     if (!Follower) return res.sendStatus(500);
 
@@ -60,7 +60,7 @@ const deleteFollower = async (req, res, next) => {
     // DELETE : req.params, req.query
     if (!req.params.id) return res.sendStatus(400);
 
-    const Follower = await FollowerServices.deleteFollowerById(req.params.id);
+    const Follower = await FollowerRepository.deleteFollowerById(req.params.id);
 
     if (!Follower) return res.sendStatus(500);
 
@@ -80,7 +80,7 @@ const updateFollower = async (req, res, next) => {
     // UPDATE : req.params, req.query
     if (!req.params.id && req.body) return res.sendStatus(400);
 
-    const Follower = await FollowerServices.updateFollowerById(
+    const Follower = await FollowerRepository.updateFollowerById(
       { _id: req.params.id },
       { $set: req.body }
     );

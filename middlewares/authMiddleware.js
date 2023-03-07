@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { ADMIN_ROLE, STAFF_ROLE } = require("../constansts/role");
 const { decodeToken } = require("../utils/jwt");
+const { User } = require("../models/User");
 
 const isLoggedIn = async (req, res, next) => {
   try {
@@ -8,6 +9,10 @@ const isLoggedIn = async (req, res, next) => {
     const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) return res.status(400).send("Haven't logged in yet !!!");
+
+    const tokenVerified = await jwt.verify(token, process.env.SECRET_KEY);
+
+    if (!tokenVerified) return res.status(400).send("token is not valid !!!");
 
     next();
   } catch (error) {
@@ -24,9 +29,18 @@ const isAdmin = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(" ")[1];
+
+    const tokenVerified = await jwt.verify(token, process.env.SECRET_KEY);
+
+    if (!tokenVerified) return res.status(400).send("token is not valid !!!");
+
     const payload = decodeToken(token);
 
-    if (payload.role != ADMIN_ROLE)
+    const data = await User.findOne({ _id: payload._id });
+
+    if (!data) return res.status(400).send("user is not exist !!!");
+
+    if (data.role != ADMIN_ROLE)
       return res.status(400).send("You are not Admin !!!");
 
     next();
@@ -44,9 +58,18 @@ const isStaff = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(" ")[1];
+
+    const tokenVerified = await jwt.verify(token, process.env.SECRET_KEY);
+
+    if (!tokenVerified) return res.status(400).send("token is not valid !!!");
+
     const payload = decodeToken(token);
 
-    if (payload.role != STAFF_ROLE)
+    const data = await User.findOne({ _id: payload._id });
+
+    if (!data) return res.status(400).send("user is not exist !!!");
+
+    if (data.role != STAFF_ROLE)
       return res.status(400).send("You are not Staff !!!");
 
     next();

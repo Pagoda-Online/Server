@@ -1,4 +1,4 @@
-const CourseServices = require("../services/course.service");
+const CourseRepository = require("../repository/course.repository");
 const { decodeToken } = require("../utils/jwt");
 
 const getAllCourses = async (req, res, next) => {
@@ -6,19 +6,19 @@ const getAllCourses = async (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
 
-  const Courses = await CourseServices.getAllCourses(payload._id);
+  const Courses = await CourseRepository.getAllCourses(payload._id);
   res.send(Courses);
 };
 
 const getAllCoursesForAdmin = async (req, res, next) => {
-  const Courses = await CourseServices.getAllCoursesForAdmin();
+  const Courses = await CourseRepository.getAllCoursesForAdmin();
   res.send(Courses);
 };
 
 const getCourse = async (req, res, next) => {
   const id = req.params.id;
 
-  const Course = await CourseServices.getCourseById(id);
+  const Course = await CourseRepository.getCourseById(id);
 
   if (!Course) res.sendStatus(400);
 
@@ -37,7 +37,7 @@ const createCourse = async (req, res, next) => {
     const payload = decodeToken(token);
     req.body.UserId = payload._id;
 
-    const Course = await CourseServices.createCourse(req.body);
+    const Course = await CourseRepository.createCourse(req.body);
 
     if (!Course) return res.sendStatus(500);
 
@@ -56,7 +56,7 @@ const deleteCourse = async (req, res, next) => {
     // DELETE : req.params, req.query
     if (!req.params.id) return res.sendStatus(400);
 
-    const Course = await CourseServices.deleteCourseById(req.params.id);
+    const Course = await CourseRepository.deleteCourseById(req.params.id);
 
     if (!Course) return res.sendStatus(500);
 
@@ -76,7 +76,7 @@ const updateCourse = async (req, res, next) => {
     // UPDATE : req.params, req.query
     if (!req.params.id && req.body) return res.sendStatus(400);
 
-    const Course = await CourseServices.updateCourseById(
+    const Course = await CourseRepository.updateCourseById(
       { _id: req.params.id },
       { $set: req.body }
     );
