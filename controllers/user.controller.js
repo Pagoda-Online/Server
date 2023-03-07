@@ -116,18 +116,15 @@ const activeAccount = async (req, res, next) => {
 
 const sendMail = async (req, res, next) => {
   try {
-    const selectedAccounts = req.body.email;
+    const Account = req.body.email;
     const text = req.body.text;
+    const subject = req.body.subject;
+    const sendmail = await sendEmail(Account, subject, text);
 
-    const sendPromises = selectedAccounts.map(async (email) => {
-      await sendEmail(email.email, "Verify Email", text);
-      return response.status(200).json(email);
-    });
-    const updatedAccounts = await Promise.all(sendPromises);
-    res.json(updatedAccounts);
+    return res.status(200).json({ message: "send email successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error updating accounts" });
+    res.status(500).json({ message: "can not send email" });
   }
 };
 

@@ -25,6 +25,11 @@ const decodeToken = (token) => {
     if (!token) {
       return res.send("Don't have access token");
     }
+
+    // const tokenVerified = await jwt.verify(token, process.env.SECRET_KEY);
+
+    // if (!tokenVerified) return res.status(400).send("token is not valid !!!");
+
     const decoded = jwt.decode(token, { complete: true });
     // const iv = decoded.payload.iv;
     // const encryptedPayload = decoded.payload.data;

@@ -109,9 +109,9 @@ const login = async (req, res, next) => {
 
     // const payload = { _id: UserId, email: userEmail, role, fullname };
 
-    const { _id: UserId } = foundUser;
+    const { _id: UserId, role } = foundUser;
 
-    const payload = { _id: UserId };
+    const payload = { _id: UserId, role };
 
     const token = await createToken(payload);
 

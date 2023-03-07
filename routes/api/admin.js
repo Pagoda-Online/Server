@@ -22,6 +22,8 @@ router.put("/users/activation", UserController.activeAccount);
 
 router.put("/users/deactivation", UserController.inactiveAccount);
 
+router.post("/users/email", UserController.sendMail);
+
 // POST ROUTERS
 router.get("/posts", PostController.getAllPostsForAdmin);
 

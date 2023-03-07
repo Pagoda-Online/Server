@@ -30,17 +30,17 @@ const isAdmin = async (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(" ")[1];
 
-    const tokenVerified = await jwt.verify(token, process.env.SECRET_KEY);
+    // const tokenVerified = await jwt.verify(token, process.env.SECRET_KEY);
 
-    if (!tokenVerified) return res.status(400).send("token is not valid !!!");
+    // if (!tokenVerified) return res.status(400).send("token is not valid !!!");
 
     const payload = decodeToken(token);
 
-    const data = await User.findOne({ _id: payload._id });
+    // const data = await User.findOne({ _id: payload._id });
 
-    if (!data) return res.status(400).send("user is not exist !!!");
+    // if (!data) return res.status(400).send("user is not exist !!!");
 
-    if (data.role != ADMIN_ROLE)
+    if (payload.role != ADMIN_ROLE)
       return res.status(400).send("You are not Admin !!!");
 
     next();
@@ -59,17 +59,17 @@ const isStaff = async (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(" ")[1];
 
-    const tokenVerified = await jwt.verify(token, process.env.SECRET_KEY);
+    // const tokenVerified = await jwt.verify(token, process.env.SECRET_KEY);
 
-    if (!tokenVerified) return res.status(400).send("token is not valid !!!");
+    // if (!tokenVerified) return res.status(400).send("token is not valid !!!");
 
     const payload = decodeToken(token);
 
-    const data = await User.findOne({ _id: payload._id });
+    // const data = await User.findOne({ _id: payload._id });
 
-    if (!data) return res.status(400).send("user is not exist !!!");
+    // if (!data) return res.status(400).send("user is not exist !!!");
 
-    if (data.role != STAFF_ROLE)
+    if (payload.role != STAFF_ROLE)
       return res.status(400).send("You are not Staff !!!");
 
     next();
