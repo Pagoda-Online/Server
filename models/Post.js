@@ -8,7 +8,7 @@ const PostSchema = new Schema(
     UserId: { type: mongoose.Types.ObjectId, ref: "User" },
     PostTitle: String,
     PostDesc: String,
-    UrlImagePath: String,
+    UrlImagePath: { type: String, default: "null" },
   },
   { timestamps: true }
 );

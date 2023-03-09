@@ -2,8 +2,6 @@ const { User } = require("../models/User");
 // const User = require("../repository/user.repository");
 const sendEmail = require("../utils/sendEmail");
 
-const { hashPassword } = require("../utils/bcrypt");
-
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -16,26 +14,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
-const createAccount = async (req, res, next) => {
-  try {
-    let data = req.body;
-    const user = await User.findOne({ email: data.email });
-
-    if (user) return res.status(400).send("user already exist");
-
-    const hashedPassword = await hashPassword(data.password);
-
-    const newUser = await User.create({ ...data, password: hashedPassword });
-
-    if (!newUser) return res.status(500).send("Internal server error");
-
-    return res.status(200).send(newUser);
-  } catch (error) {
-    console.log("🚀 ~ file: auth.js ~ line 19 ~ router.post ~ error", error);
-    next(error);
-  }
-};
 
 const updateAccount = async (req, res, next) => {
   try {
@@ -83,7 +61,7 @@ const inactiveAccount = async (req, res, next) => {
     );
 
     const updatedAccount = await User.findOneAndUpdate(
-      { _id: account._id },
+      { email: account.email },
       { isActive: false },
       { new: true }
     );
@@ -103,7 +81,7 @@ const activeAccount = async (req, res, next) => {
     );
 
     const updatedAccount = await User.findOneAndUpdate(
-      { _id: account._id },
+      { email: account.email },
       { isActive: true },
       { new: true }
     );
@@ -176,7 +154,6 @@ const deleteAccount = async (req, res, next) => {
 module.exports = {
   getAllUser,
   getUserById,
-  createAccount,
   updateAccount,
   inactiveAccount,
   activeAccount,

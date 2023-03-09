@@ -15,7 +15,7 @@ const UserSchema = new Schema(
     phoneNumber: String,
     password: String,
     fullname: String,
-    UrlImagePath: String,
+    UrlImagePath: { type: String, default: "null" },
     isRequestChangeRole: { type: Boolean, default: false },
     isActive: { type: Boolean, default: false },
     role: {

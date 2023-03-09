@@ -1,5 +1,8 @@
 const PostRepository = require("../repository/post.repository");
 const { decodeToken } = require("../utils/jwt");
+const { uploadToCloudinary } = require("../services/upload.service");
+const { ErrorHandler } = require("../utils/errorHandler");
+const { bufferToDataURI } = require("../utils/file");
 
 const getAllPosts = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -28,6 +31,15 @@ const getPost = async (req, res, next) => {
 
 const createPost = async (req, res, next) => {
   try {
+    const { file } = req;
+    // if (!file) throw new ErrorHandler(400, "Image is required");
+
+    const fileFormat = file.mimetype.split("/")[1];
+    const { base64 } = bufferToDataURI(fileFormat, file.buffer);
+
+    const imageDetails = await uploadToCloudinary(base64, fileFormat);
+
+    req.body.UrlImagePath = imageDetails.url;
     // GET : req.params, req.query
     if (!req.body) return res.sendStatus(400);
     const authHeader = req.headers.authorization;
@@ -41,11 +53,34 @@ const createPost = async (req, res, next) => {
 
     return res.status(200).send(Post);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: PostController.js ~ line 32 ~ createPost ~ error",
-      error
-    );
-    res.sendStatus(500);
+    next(new ErrorHandler(error.statusCode || 500, error.message));
+  }
+};
+
+const createPostAdmin = async (req, res, next) => {
+  try {
+    // GET : req.params, req.query
+    if (!req.body) return res.sendStatus(400);
+
+    req.body.UserId = "6403990fbb75a53ed142763a";
+
+    const { file } = req;
+    // if (!file) throw new ErrorHandler(400, "Image is required");
+
+    const fileFormat = file.mimetype.split("/")[1];
+    const { base64 } = bufferToDataURI(fileFormat, file.buffer);
+
+    const imageDetails = await uploadToCloudinary(base64, fileFormat);
+
+    req.body.UrlImagePath = imageDetails.url;
+
+    const Post = await PostRepository.createPost(req.body);
+
+    if (!Post) return res.sendStatus(500);
+
+    return res.status(200).json(Post);
+  } catch (error) {
+    next(new ErrorHandler(error.statusCode || 500, error.message));
   }
 };
 
@@ -68,6 +103,15 @@ const deletePost = async (req, res, next) => {
 
 const updatePost = async (req, res, next) => {
   try {
+    const { file } = req;
+    // if (!file) throw new ErrorHandler(400, "Image is required");
+
+    const fileFormat = file.mimetype.split("/")[1];
+    const { base64 } = bufferToDataURI(fileFormat, file.buffer);
+
+    const imageDetails = await uploadToCloudinary(base64, fileFormat);
+
+    req.body.UrlImagePath = imageDetails.url;
     // UPDATE : req.params, req.query
     if (!req.params.id && req.body) return res.sendStatus(400);
 
@@ -93,4 +137,5 @@ module.exports = {
   deletePost,
   updatePost,
   getAllPostsForAdmin,
+  createPostAdmin,
 };

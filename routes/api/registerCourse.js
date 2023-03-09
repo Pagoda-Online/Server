@@ -59,9 +59,9 @@ router.get("/", RegisterCourseController.getAllRegisterCourses);
 
 router.get("/:id", RegisterCourseController.getRegisterCourse);
 
-router.post("/create", RegisterCourseController.createRegisterCourse);
+router.post("/", RegisterCourseController.createRegisterCourse);
 
-router.delete("/delete/:id", RegisterCourseController.deleteRegisterCourse);
+router.delete("/:id", RegisterCourseController.deleteRegisterCourse);
 
 // router.put("/edit/:id", RegisterCourseController.updateRegisterCourse);
 

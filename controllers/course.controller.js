@@ -1,5 +1,8 @@
 const CourseRepository = require("../repository/course.repository");
 const { decodeToken } = require("../utils/jwt");
+const { uploadToCloudinary } = require("../services/upload.service");
+const { ErrorHandler } = require("../utils/errorHandler");
+const { bufferToDataURI } = require("../utils/file");
 
 const getAllCourses = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -29,6 +32,15 @@ const getCourse = async (req, res, next) => {
 
 const createCourse = async (req, res, next) => {
   try {
+    const { file } = req;
+    // if (!file) throw new ErrorHandler(400, "Image is required");
+
+    const fileFormat = file.mimetype.split("/")[1];
+    const { base64 } = bufferToDataURI(fileFormat, file.buffer);
+
+    const imageDetails = await uploadToCloudinary(base64, fileFormat);
+
+    req.body.UrlImagePath = imageDetails.url;
     // GET : req.params, req.query
     if (!req.body) return res.sendStatus(400);
 
@@ -73,6 +85,15 @@ const deleteCourse = async (req, res, next) => {
 
 const updateCourse = async (req, res, next) => {
   try {
+    const { file } = req;
+    // if (!file) throw new ErrorHandler(400, "Image is required");
+
+    const fileFormat = file.mimetype.split("/")[1];
+    const { base64 } = bufferToDataURI(fileFormat, file.buffer);
+
+    const imageDetails = await uploadToCloudinary(base64, fileFormat);
+
+    req.body.UrlImagePath = imageDetails.url;
     // UPDATE : req.params, req.query
     if (!req.params.id && req.body) return res.sendStatus(400);
 

@@ -59,7 +59,7 @@ router.get("/", DonateController.getAllDonates);
 
 router.get("/received", DonateController.getAllDonatesReceive);
 
-router.post("/create", DonateController.createDonate);
+router.post("/", DonateController.createDonate);
 
 router.get("/:id", DonateController.getDonate);
 

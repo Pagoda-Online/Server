@@ -61,10 +61,10 @@ router.get("/followed", FollowerController.getAllFollowers);
 
 router.get("/:id", FollowerController.getFollower);
 
-router.post("/create", FollowerController.createFollower);
+router.post("/", FollowerController.createFollower);
 
-router.delete("/delete/:id", FollowerController.deleteFollower);
+router.delete("/:id", FollowerController.deleteFollower);
 
-router.put("/edit/:id", FollowerController.updateFollower);
+router.put("/:id", FollowerController.updateFollower);
 
 module.exports = router;

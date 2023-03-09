@@ -59,10 +59,10 @@ router.get("/", CommentController.getAllComments);
 
 router.get("/:id", CommentController.getComment);
 
-router.post("/create", CommentController.createComment);
+router.post("/", CommentController.createComment);
 
-router.delete("/delete/:id", CommentController.deleteComment);
+router.delete("/:id", CommentController.deleteComment);
 
-router.put("/edit/:id", CommentController.updateComment);
+router.put("/:id", CommentController.updateComment);
 
 module.exports = router;

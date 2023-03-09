@@ -74,8 +74,8 @@ app.use("/", indexRouter);
 app.use("/auth", authRouter);
 
 app.use("/donates", isLoggedIn, donateRouter);
-app.use("/register-event", isLoggedIn, registerEventRouter);
-app.use("/register-course", isLoggedIn, registerCourseRouter);
+app.use("/event-registration", isLoggedIn, registerEventRouter);
+app.use("/course-registration", isLoggedIn, registerCourseRouter);
 app.use("/posts", isLoggedIn, postRouter);
 app.use("/followers", isLoggedIn, FollowerRouter);
 app.use("/comments", isLoggedIn, commentRouter);

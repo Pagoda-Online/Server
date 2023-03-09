@@ -8,7 +8,7 @@ const EventSchema = new Schema(
     UserId: { type: mongoose.Types.ObjectId, ref: "User" },
     Title: String,
     Description: String,
-    UrlImagePath: String,
+    UrlImagePath: { type: String, default: "null" },
     Start_Date: Date,
     End_Date: Date,
   },

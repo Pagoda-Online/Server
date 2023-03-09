@@ -59,9 +59,9 @@ router.get("/", RegisterEventController.getAllRegisterEvents);
 
 router.get("/:id", RegisterEventController.getRegisterEvent);
 
-router.post("/create", RegisterEventController.createRegisterEvent);
+router.post("/", RegisterEventController.createRegisterEvent);
 
-router.delete("/delete/:id", RegisterEventController.deleteRegisterEvent);
+router.delete("/:id", RegisterEventController.deleteRegisterEvent);
 
 // router.put("/edit/:id", RegisterEventController.updateRegisterEvent);
 

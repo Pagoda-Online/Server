@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const PostController = require("../../controllers/post.controller");
+const { upload } = require("../../services/upload.service");
 // const { isLoggedIn } = require("../../middlewares/authMiddleware");
 // const { canDeletePost } = require("../../permissions/Post");
 /**
@@ -59,10 +60,10 @@ router.get("/", PostController.getAllPosts);
 
 router.get("/:id", PostController.getPost);
 
-router.post("/create", PostController.createPost);
+router.post("/create", upload.single("image"), PostController.createPost);
 
 router.delete("/delete/:id", PostController.deletePost);
 
-router.put("/edit/:id", PostController.updatePost);
+router.put("/edit/:id", upload.single("image"), PostController.updatePost);
 
 module.exports = router;
