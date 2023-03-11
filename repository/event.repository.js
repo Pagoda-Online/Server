@@ -2,7 +2,7 @@ const EventModel = require("../models/Event");
 
 const findAllEvent = async (UserId) => {
   try {
-    const events = await EventModel.find({ UserId: UserId });
+    const events = await EventModel.find({ UserId: UserId }).populate("UserId");
     return events;
   } catch (error) {
     console.log(

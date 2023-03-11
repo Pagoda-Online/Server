@@ -9,6 +9,7 @@ const CourseSchema = new Schema(
     title: String,
     Description: String,
     UrlImagePath: { type: String, default: "null" },
+    UrlVideoPath: { type: String, default: "null" },
   },
   { timestamps: true }
 );

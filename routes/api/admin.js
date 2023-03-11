@@ -17,9 +17,9 @@ router.delete("/users/:id", UserController.deleteAccount);
 
 router.post("/users/email", UserController.sendMail);
 
-router.put("/users/activation", UserController.activeAccount);
+router.put("/users/activation/:id", UserController.activeAccount);
 
-router.put("/users/deactivation", UserController.inactiveAccount);
+router.put("/users/deactivation/:id", UserController.inactiveAccount);
 
 router.post("/users/email", UserController.sendMail);
 

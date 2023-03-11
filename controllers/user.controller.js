@@ -47,23 +47,31 @@ const updateAccount = async (req, res, next) => {
 
     return res.status(200).send(data);
   } catch (error) {
-    console.log("🚀 ~ file: auth.js ~ line 19 ~ router.post ~ error", error);
+    console.log(
+      "🚀 ~ file: user.controller.js:50 ~ updateAccount ~ error:",
+      error
+    );
+
     next(error);
   }
 };
 
 const inactiveAccount = async (req, res, next) => {
   try {
-    const account = req.body;
+    const account = req.params.id;
     console.log(
       "🚀 ~ file: user.controller.js:80 ~ inactiveAccount ~ account:",
       account
     );
 
     const updatedAccount = await User.findOneAndUpdate(
-      { email: account.email },
+      { _id: account },
       { isActive: false },
       { new: true }
+    );
+    console.log(
+      "🚀 ~ file: user.controller.js:68 ~ inactiveAccount ~ updatedAccount:",
+      updatedAccount
     );
     return res.json(updatedAccount);
   } catch (error) {
@@ -74,16 +82,20 @@ const inactiveAccount = async (req, res, next) => {
 
 const activeAccount = async (req, res, next) => {
   try {
-    const account = req.body;
+    const account = req.params.id;
     console.log(
       "🚀 ~ file: user.controller.js:80 ~ inactiveAccount ~ account:",
       account
     );
 
     const updatedAccount = await User.findOneAndUpdate(
-      { email: account.email },
+      { _id: account },
       { isActive: true },
       { new: true }
+    );
+    console.log(
+      "🚀 ~ file: user.controller.js:92 ~ activeAccount ~ updatedAccount:",
+      updatedAccount
     );
     return res.json(updatedAccount);
   } catch (error) {
@@ -130,7 +142,11 @@ const getUserById = async (req, res, next) => {
 
     return res.status(200).json(foundUser);
   } catch (error) {
-    console.log("🚀 ~ file: auth.js ~ line 47 ~ router.post ~ error", error);
+    console.log(
+      "🚀 ~ file: user.controller.js:141 ~ getUserById ~ error:",
+      error
+    );
+
     next(error);
   }
 };

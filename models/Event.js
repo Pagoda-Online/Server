@@ -9,8 +9,11 @@ const EventSchema = new Schema(
     Title: String,
     Description: String,
     UrlImagePath: { type: String, default: "null" },
-    Start_Date: Date,
-    End_Date: Date,
+    Start_Date: { type: Date, default: Date.now() },
+    End_Date: {
+      type: Date,
+      default: new Date("3000-01-01T00:00:00.000Z"),
+    },
   },
   { timestamps: true }
 );

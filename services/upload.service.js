@@ -24,6 +24,10 @@ const uploadToCloudinary = async (fileString, format) => {
 
     return res;
   } catch (error) {
+    console.log(
+      "🚀 ~ file: upload.service.js:28 ~ uploadToCloudinary ~ error:",
+      error
+    );
     throw new ErrorHandler(500, error);
   }
 };

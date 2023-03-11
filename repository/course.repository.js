@@ -2,7 +2,9 @@ const CourseModel = require("../models/Course");
 
 const findAllCourse = async (UserId) => {
   try {
-    const courses = await CourseModel.find({ UserId: UserId });
+    const courses = await CourseModel.find({ UserId: UserId }).populate(
+      "UserId"
+    );
     return courses;
   } catch (error) {
     console.log(

@@ -9,7 +9,7 @@ const getAllCourses = async (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
 
-  const Courses = await CourseRepository.getAllCourses(payload._id);
+  const Courses = await CourseRepository.findAllCourse(payload._id);
   res.send(Courses);
 };
 
@@ -33,9 +33,17 @@ const getCourse = async (req, res, next) => {
 const createCourse = async (req, res, next) => {
   try {
     const { file } = req;
+    console.log(
+      "🚀 ~ file: course.controller.js:36 ~ createCourse ~ file:",
+      req.body
+    );
     // if (!file) throw new ErrorHandler(400, "Image is required");
 
     const fileFormat = file.mimetype.split("/")[1];
+    console.log(
+      "🚀 ~ file: course.controller.js:43 ~ createCourse ~ fileFormat:",
+      fileFormat
+    );
     const { base64 } = bufferToDataURI(fileFormat, file.buffer);
 
     const imageDetails = await uploadToCloudinary(base64, fileFormat);
@@ -85,17 +93,17 @@ const deleteCourse = async (req, res, next) => {
 
 const updateCourse = async (req, res, next) => {
   try {
-    const { file } = req;
-    // if (!file) throw new ErrorHandler(400, "Image is required");
+    // const { file } = req;
+    // // if (!file) throw new ErrorHandler(400, "Image is required");
 
-    const fileFormat = file.mimetype.split("/")[1];
-    const { base64 } = bufferToDataURI(fileFormat, file.buffer);
+    // const fileFormat = file.mimetype.split("/")[1];
+    // const { base64 } = bufferToDataURI(fileFormat, file.buffer);
 
-    const imageDetails = await uploadToCloudinary(base64, fileFormat);
+    // const imageDetails = await uploadToCloudinary(base64, fileFormat);
 
-    req.body.UrlImagePath = imageDetails.url;
-    // UPDATE : req.params, req.query
-    if (!req.params.id && req.body) return res.sendStatus(400);
+    // req.body.UrlImagePath = imageDetails.url;
+    // // UPDATE : req.params, req.query
+    // if (!req.params.id && req.body) return res.sendStatus(400);
 
     const Course = await CourseRepository.updateCourseById(
       { _id: req.params.id },
