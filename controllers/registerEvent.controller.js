@@ -1,30 +1,36 @@
 const RegisterEventRepository = require("../repository/registerEvent.repository");
+const RegisterEventModel = require("../models/RegisterEvent");
 const { decodeToken } = require("../utils/jwt");
 
 const getAllRegisterEvents = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(" ")[1];
-  const payload = decodeToken(token);
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
 
-  const RegisterEvents = await RegisterEventRepository.getAllRegisterEvents(
-    payload._id
-  );
-  res.send(RegisterEvents);
+    const RegisterEvents = await RegisterEventRepository.getAllRegisterEvents(
+      payload._id
+    );
+    res.send(RegisterEvents);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const getRegisterEvent = async (req, res, next) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
 
-  const RegisterEvent = await RegisterEventRepository.getRegisterEventById(id);
+    const RegisterEvent = await RegisterEventRepository.getRegisterEventById(
+      id
+    );
 
-  if (!RegisterEvent) res.sendStatus(400);
+    if (!RegisterEvent) res.sendStatus(400);
 
-  console.log(
-    "🚀 ~ file: RegisterEvent.js ~ line 16 ~ RegisterEvent",
-    RegisterEvent
-  );
-
-  res.send(RegisterEvent);
+    res.send(RegisterEvent);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const createRegisterEvent = async (req, res, next) => {
@@ -44,20 +50,21 @@ const createRegisterEvent = async (req, res, next) => {
 
     return res.status(200).send(RegisterEvent);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: RegisterEventController.js ~ line 32 ~ createRegisterEvent ~ error",
-      error
-    );
     res.sendStatus(500);
   }
 };
 
 const deleteRegisterEvent = async (req, res, next) => {
   try {
-    // DELETE : req.params, req.query
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
+    req.body.UserId = payload._id;
+
     if (!req.params.id) return res.sendStatus(400);
 
     const RegisterEvent = await RegisterEventRepository.deleteRegisterEventById(
+      req.body.UserId,
       req.params.id
     );
 
@@ -65,11 +72,6 @@ const deleteRegisterEvent = async (req, res, next) => {
 
     return res.status(200).send(RegisterEvent);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: RegisterEvent.controller.js:52 ~ deleteRegisterEvent ~ error",
-      error
-    );
-
     res.sendStatus(500);
   }
 };
@@ -88,11 +90,30 @@ const updateRegisterEvent = async (req, res, next) => {
 
     return res.status(200).send(RegisterEvent);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: RegisterEvent.controller.js:75 ~ updateRegisterEvent ~ error",
-      error
-    );
+    res.sendStatus(500);
+  }
+};
 
+const checkRegister = async (req, res, next) => {
+  try {
+    if (!req.body) return res.sendStatus(400);
+
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
+    req.body.UserId = payload._id;
+
+    const RegisterCheck = await RegisterEventModel.findOne({
+      UserId: req.body.UserId,
+      idEvent: req.params.id,
+    });
+    console.log(
+      "🚀 ~ file: registerEvent.controller.js:109 ~ checkRegister ~ RegisterCheck:",
+      RegisterCheck
+    );
+    const isRegister = !!RegisterCheck;
+    return res.status(200).send(isRegister);
+  } catch (error) {
     res.sendStatus(500);
   }
 };
@@ -103,4 +124,5 @@ module.exports = {
   createRegisterEvent,
   deleteRegisterEvent,
   updateRegisterEvent,
+  checkRegister,
 };

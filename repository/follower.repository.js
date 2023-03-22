@@ -2,7 +2,9 @@ const FollowerModel = require("../models/Follower");
 
 const findAllFollower = async (UserId) => {
   try {
-    const Followers = await FollowerModel.find({ userFollowed_id: UserId });
+    const Followers = await FollowerModel.find({
+      userFollowed_id: UserId,
+    }).populate("userFollowing_id");
     return Followers;
   } catch (error) {
     console.log(
@@ -14,7 +16,9 @@ const findAllFollower = async (UserId) => {
 
 const findAllFollowing = async (UserId) => {
   try {
-    const Followers = await FollowerModel.find({ userFollowing_id: UserId });
+    const Followers = await FollowerModel.find({
+      userFollowing_id: UserId,
+    }).populate("userFollowed_id");
     return Followers;
   } catch (error) {
     console.log(
@@ -48,9 +52,12 @@ const createFollower = async (data) => {
   }
 };
 
-const deleteFollowerById = async (id) => {
+const deleteFollower = async (userFollowing_id, userFollowed_id) => {
   try {
-    const Follower = await FollowerModel.deleteMany({ _id: id });
+    const Follower = await FollowerModel.deleteMany({
+      userFollowing_id: userFollowing_id,
+      userFollowed_id: userFollowed_id,
+    });
     return Follower;
   } catch (error) {
     console.log(
@@ -73,7 +80,7 @@ module.exports = {
   findAllFollower,
   findFollowerById,
   createFollower,
-  deleteFollowerById,
+  deleteFollower,
   updateFollowerById,
   findAllFollowing,
 };

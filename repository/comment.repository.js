@@ -1,8 +1,10 @@
 const CommentModel = require("../models/Comment");
 
-const findAllComment = async (UserId) => {
+const findAllComment = async (PostId) => {
   try {
-    const Comments = await CommentModel.find({ UserId: UserId });
+    const Comments = await CommentModel.find({ PostId: PostId }).populate(
+      "UserId"
+    );
     return Comments;
   } catch (error) {
     console.log(

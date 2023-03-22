@@ -15,8 +15,7 @@ const createAccount = async (req, res, next) => {
 
     return newUser;
   } catch (error) {
-    console.log("🚀 ~ file: auth.js ~ line 19 ~ router.post ~ error", error);
-    next(error);
+    return res.status(500).send("Internal server error");
   }
 };
 
@@ -28,7 +27,6 @@ const updateAccount = async (req, res, next) => {
 
     return newUserUpdate;
   } catch (error) {
-    console.log("🚀 ~ file: auth.js ~ line 19 ~ router.post ~ error", error);
     next(error);
   }
 };
@@ -38,11 +36,6 @@ const getAllUser = async (req, res, next) => {
     const users = await User.find({});
     return users;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: user.controller.js:61 ~ getAllUser ~ error:",
-      error
-    );
-
     next(error);
   }
 };
@@ -55,7 +48,6 @@ const getUserById = async (req, res, next) => {
 
     return foundUser;
   } catch (error) {
-    console.log("🚀 ~ file: auth.js ~ line 47 ~ router.post ~ error", error);
     next(error);
   }
 };
@@ -68,10 +60,6 @@ const deleteAccount = async (req, res, next) => {
 
     return foundUser;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: user.controller.js:95 ~ deleteAccount ~ error:",
-      error
-    );
     next(error);
   }
 };

@@ -36,15 +36,15 @@ const createRegisterEvent = async (data) => {
   }
 };
 
-const deleteRegisterEventById = async (id) => {
+const deleteRegisterEventById = async (UserId, id) => {
   try {
-    const RegisterEvent = await RegisterEventModel.deleteMany({ _id: id });
+    const RegisterEvent = await RegisterEventModel.deleteMany({
+      UserId: UserId,
+      idEvent: id,
+    });
     return RegisterEvent;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: RegisterEventRepository.js ~ line 33 ~ findRegisterEventById ~ error",
-      error
-    );
+    return error;
   }
 };
 
@@ -57,10 +57,24 @@ const updateRegisterEventById = async (id, data) => {
   }
 };
 
+const checkRegister = async (UserId, EventId) => {
+  try {
+    const registerEvents = await RegisterEventModel.find({
+      UserId: UserId,
+      idEvent: EventId,
+    });
+
+    return registerEvents;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   findAllRegisterEvent,
   findRegisterEventById,
   createRegisterEvent,
   deleteRegisterEventById,
   updateRegisterEventById,
+  checkRegister,
 };

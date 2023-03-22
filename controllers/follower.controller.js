@@ -2,33 +2,43 @@ const FollowerRepository = require("../repository/follower.repository");
 const { decodeToken } = require("../utils/jwt");
 
 const getAllFollowers = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(" ")[1];
-  const payload = decodeToken(token);
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
 
-  const Followers = await FollowerRepository.getAllFollowers(payload._id);
-  res.send(Followers);
+    const Followers = await FollowerRepository.findAllFollower(payload._id);
+    res.send(Followers);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const getAllFollowing = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(" ")[1];
-  const payload = decodeToken(token);
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
 
-  const Followers = await FollowerRepository.getAllFollowing(payload._id);
-  res.send(Followers);
+    const Followers = await FollowerRepository.findAllFollowing(payload._id);
+    res.send(Followers);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const getFollower = async (req, res, next) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
 
-  const Follower = await FollowerRepository.getFollowerById(id);
+    const Follower = await FollowerRepository.getFollowerById(id);
 
-  if (!Follower) res.sendStatus(400);
+    if (!Follower) res.sendStatus(400);
 
-  console.log("🚀 ~ file: Follower.js ~ line 16 ~ Follower", Follower);
-
-  res.send(Follower);
+    res.send(Follower);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const createFollower = async (req, res, next) => {
@@ -47,20 +57,23 @@ const createFollower = async (req, res, next) => {
 
     return res.status(200).send(Follower);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: FollowerController.js ~ line 32 ~ createFollower ~ error",
-      error
-    );
     res.sendStatus(500);
   }
 };
 
 const deleteFollower = async (req, res, next) => {
   try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
+    req.body.userFollowing_id = payload._id;
     // DELETE : req.params, req.query
     if (!req.params.id) return res.sendStatus(400);
 
-    const Follower = await FollowerRepository.deleteFollowerById(req.params.id);
+    const Follower = await FollowerRepository.deleteFollower(
+      req.body.userFollowing_id,
+      req.params.id
+    );
 
     if (!Follower) return res.sendStatus(500);
 

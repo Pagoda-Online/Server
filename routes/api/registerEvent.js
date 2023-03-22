@@ -57,7 +57,7 @@ router.get("/", RegisterEventController.getAllRegisterEvents);
  *                    type: number
  */
 
-router.get("/:id", RegisterEventController.getRegisterEvent);
+router.get("/:id", RegisterEventController.checkRegister);
 
 router.post("/", RegisterEventController.createRegisterEvent);
 

@@ -1,4 +1,5 @@
 const RegisterCourseRepository = require("../repository/registerCourse.repository");
+const RegisterCourseModel = require("../models/RegisterCourse");
 const { decodeToken } = require("../utils/jwt");
 
 const getAllRegisterCourses = async (req, res, next) => {
@@ -47,31 +48,29 @@ const createRegisterCourse = async (req, res, next) => {
 
     return res.status(200).send(RegisterCourse);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: RegisterCourseController.js ~ line 32 ~ createRegisterCourse ~ error",
-      error
-    );
     res.sendStatus(500);
   }
 };
 
 const deleteRegisterCourse = async (req, res, next) => {
   try {
-    // DELETE : req.params, req.query
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
+    req.body.UserId = payload._id;
+
     if (!req.params.id) return res.sendStatus(400);
 
     const RegisterCourse =
-      await RegisterCourseRepository.deleteRegisterCourseById(req.params.id);
+      await RegisterCourseRepository.deleteRegisterCourseById(
+        req.body.UserId,
+        req.params.id
+      );
 
     if (!RegisterCourse) return res.sendStatus(500);
 
     return res.status(200).send(RegisterCourse);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: RegisterCourse.controller.js:52 ~ deleteRegisterCourse ~ error",
-      error
-    );
-
     res.sendStatus(500);
   }
 };
@@ -91,11 +90,28 @@ const updateRegisterCourse = async (req, res, next) => {
 
     return res.status(200).send(RegisterCourse);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: RegisterCourse.controller.js:75 ~ updateRegisterCourse ~ error",
-      error
-    );
+    res.sendStatus(500);
+  }
+};
 
+const checkRegister = async (req, res, next) => {
+  try {
+    if (!req.body) return res.sendStatus(400);
+
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
+    req.body.UserId = payload._id;
+
+    const RegisterCheck = await RegisterCourseModel.findOne({
+      UserId: req.body.UserId,
+      idCourse: req.params.id,
+    });
+
+    const isRegister = !!RegisterCheck;
+
+    return res.status(200).send(isRegister);
+  } catch (error) {
     res.sendStatus(500);
   }
 };
@@ -106,4 +122,5 @@ module.exports = {
   createRegisterCourse,
   deleteRegisterCourse,
   updateRegisterCourse,
+  checkRegister,
 };

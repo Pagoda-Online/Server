@@ -1,8 +1,23 @@
 const EventModel = require("../models/Event");
+const RegisterEventModel = require("../models/RegisterEvent");
 
 const findAllEvent = async (UserId) => {
   try {
     const events = await EventModel.find({ UserId: UserId }).populate("UserId");
+    return events;
+  } catch (error) {
+    console.log(
+      "🚀 ~ file: EventRepository.js ~ line 25 ~ findAll ~ error",
+      error
+    );
+  }
+};
+
+const findAllRegisteredEvent = async (UserId) => {
+  try {
+    const events = await RegisterEventModel.find({
+      UserId: UserId,
+    }).populate("idEvent");
     return events;
   } catch (error) {
     console.log(
@@ -80,4 +95,5 @@ module.exports = {
   deleteEventById,
   updateEventById,
   getAllEventsForAdmin,
+  findAllRegisteredEvent,
 };

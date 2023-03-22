@@ -4,9 +4,14 @@ const { decodeToken } = require("../utils/jwt");
 const getAllComments = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
-  const payload = decodeToken(token);
+  if (!token) return res.status(401);
 
-  const Comments = await CommentRepository.getAllComments(payload._id);
+  const Comments = await CommentRepository.findAllComment(req.query.PostId);
+  console.log(
+    "🚀 ~ file: comment.controller.js:10 ~ getAllComments ~ Comments:",
+    Comments
+  );
+
   res.send(Comments);
 };
 
@@ -38,10 +43,6 @@ const createComment = async (req, res, next) => {
 
     return res.status(200).send(Comment);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: CommentController.js ~ line 32 ~ createComment ~ error",
-      error
-    );
     res.sendStatus(500);
   }
 };

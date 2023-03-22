@@ -1,14 +1,37 @@
 const PostModel = require("../models/Post");
+const FollowerModel = require("../models/Follower");
 
 const findAllPost = async (UserId) => {
   try {
-    const Posts = await PostModel.find({ UserId: UserId });
+    const Posts = await PostModel.find({ UserId: UserId })
+      .sort({ createdAt: -1 })
+      .populate("UserId");
     return Posts;
   } catch (error) {
     console.log(
       "🚀 ~ file: PostRepository.js ~ line 25 ~ findAll ~ error",
       error
     );
+  }
+};
+
+const findAllPostOfFollower = async (UserId) => {
+  try {
+    const followers = await FollowerModel.find({
+      userFollowing_id: UserId,
+    }).populate("userFollowed_id");
+
+    const followedUserIds = followers.map(
+      (follower) => follower.userFollowed_id._id
+    );
+
+    const posts = await PostModel.find({
+      UserId: { $in: followedUserIds },
+    }).populate("UserId");
+
+    return posts; // các bài post của người đang follow
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -76,4 +99,5 @@ module.exports = {
   deletePostById,
   updatePostById,
   getAllPostsForAdmin,
+  findAllPostOfFollower,
 };

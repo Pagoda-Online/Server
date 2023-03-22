@@ -22,6 +22,10 @@ var FollowerRouter = require("./routes/api/follower");
 var StaffRouter = require("./routes/api/staff");
 var AdminRouter = require("./routes/api/admin");
 
+var EventRouter = require("./routes/api/event");
+var CourseRouter = require("./routes/api/course");
+var UserRouter = require("./routes/api/users");
+
 const {
   isLoggedIn,
   isAdmin,
@@ -77,18 +81,16 @@ app.use("/donates", isLoggedIn, donateRouter);
 app.use("/event-registration", isLoggedIn, registerEventRouter);
 app.use("/course-registration", isLoggedIn, registerCourseRouter);
 app.use("/posts", isLoggedIn, postRouter);
-app.use("/followers", isLoggedIn, FollowerRouter);
+app.use("/follow", isLoggedIn, FollowerRouter);
 app.use("/comments", isLoggedIn, commentRouter);
 app.use("/admin", isLoggedIn, isAdmin, AdminRouter);
 app.use("/staff", isLoggedIn, isStaff, StaffRouter);
-// app.use("/donates", donateRouter);
-// app.use("/register-event", registerEventRouter);
-// app.use("/register-course", registerCourseRouter);
-// app.use("/posts", postRouter);
-// app.use("/followers", FollowerRouter);
-// app.use("/comments", commentRouter);
-// app.use("/admin", AdminRouter);
-// app.use("/staff", StaffRouter);
+
+app.use("/courses", isLoggedIn, CourseRouter);
+app.use("/events", isLoggedIn, EventRouter);
+app.use("/post", isLoggedIn, postRouter);
+
+app.use("/users", UserRouter);
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

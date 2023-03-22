@@ -5,28 +5,60 @@ const { ErrorHandler } = require("../utils/errorHandler");
 const { bufferToDataURI } = require("../utils/file");
 
 const getAllEvents = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(" ")[1];
-  const payload = decodeToken(token);
-  const Events = await EventRepository.findAllEvent(payload._id);
-  res.send(Events);
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
+    const Events = await EventRepository.findAllEvent(payload._id);
+    res.send(Events);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
+
+const getAllRegisteredEvent = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
+    const Events = await EventRepository.findAllRegisteredEvent(payload._id);
+    res.send(Events);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const getAllEventsForAdmin = async (req, res, next) => {
-  const Events = await EventRepository.getAllEventsForAdmin();
-  res.send(Events);
+  try {
+    const Events = await EventRepository.getAllEventsForAdmin();
+    res.send(Events);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const getEvent = async (req, res, next) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
 
-  const Event = await EventRepository.getEventById(id);
+    const Event = await EventRepository.findEventById(id);
 
-  if (!Event) res.sendStatus(400);
+    if (!Event) res.sendStatus(400);
 
-  console.log("🚀 ~ file: Event.js ~ line 16 ~ Event", Event);
+    res.send(Event);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
 
-  res.send(Event);
+const getAllEventsByUserId = async (req, res, next) => {
+  try {
+    const userId = req.params.UserId;
+    const Events = await EventRepository.findAllEvent(userId);
+    res.send(Events);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const createEvent = async (req, res, next) => {
@@ -54,10 +86,6 @@ const createEvent = async (req, res, next) => {
 
     return res.status(200).send(Event);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: EventController.js ~ line 32 ~ createEvent ~ error",
-      error
-    );
     res.sendStatus(500);
   }
 };
@@ -73,11 +101,6 @@ const deleteEvent = async (req, res, next) => {
 
     return res.status(200).send(Event);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: Event.controller.js:52 ~ deleteEvent ~ error",
-      error
-    );
-
     res.sendStatus(500);
   }
 };
@@ -105,11 +128,6 @@ const updateEvent = async (req, res, next) => {
 
     return res.status(200).send(Event);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: Event.controller.js:75 ~ updateEvent ~ error",
-      error
-    );
-
     res.sendStatus(500);
   }
 };
@@ -121,4 +139,6 @@ module.exports = {
   deleteEvent,
   updateEvent,
   getAllEventsForAdmin,
+  getAllEventsByUserId,
+  getAllRegisteredEvent,
 };

@@ -1,4 +1,6 @@
 const { User } = require("../models/User");
+const Follower = require("../models/Follower");
+const { decodeToken } = require("../utils/jwt");
 // const User = require("../repository/user.repository");
 const sendEmail = require("../utils/sendEmail");
 
@@ -134,19 +136,27 @@ const getAllUser = async (req, res, next) => {
 
 const getUserById = async (req, res, next) => {
   try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
+
     const id = req.params.id;
 
     const foundUser = await User.findById(id);
 
     if (!foundUser) return res.status(403).send("Can't find any user");
 
-    return res.status(200).json(foundUser);
-  } catch (error) {
-    console.log(
-      "🚀 ~ file: user.controller.js:141 ~ getUserById ~ error:",
-      error
-    );
+    // Tìm bản ghi trong model Follower
+    const follower = await Follower.findOne({
+      userFollowed_id: id,
+      userFollowing_id: payload._id,
+    });
 
+    // Nếu follower được tìm thấy, đó có nghĩa là bạn đã follow người dùng này
+    const isFollowing = !!follower;
+
+    return res.status(200).json({ foundUser, isFollowing });
+  } catch (error) {
     next(error);
   }
 };
@@ -159,10 +169,6 @@ const deleteAccount = async (req, res, next) => {
 
     res.json(foundUser);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: user.controller.js:95 ~ deleteAccount ~ error:",
-      error
-    );
     next(error);
   }
 };

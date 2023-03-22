@@ -26,7 +26,7 @@ router.post("/users/email", UserController.sendMail);
 // POST ROUTERS
 router.get("/posts", PostController.getAllPostsForAdmin);
 
-router.post("/posts", upload.single("image"), PostController.createPostAdmin);
+// router.post("/posts", upload.single("image"), PostController.createPostAdmin);
 
 router.get("/posts/:id", PostController.getPost);
 

@@ -32,6 +32,9 @@ const { upload } = require("../../services/upload.service");
 
 router.get("/", PostController.getAllPosts);
 
+router.get("/all-follower", PostController.getAllPostsOfFollower);
+
+router.get("/allPost/:UserId", PostController.getAllPostsByUserId);
 /**
  * @swagger
  * /api/Post/:id:
@@ -60,10 +63,10 @@ router.get("/", PostController.getAllPosts);
 
 router.get("/:id", PostController.getPost);
 
-router.post("/create", upload.single("image"), PostController.createPost);
+router.post("/", upload.single("image"), PostController.createPost);
 
-router.delete("/delete/:id", PostController.deletePost);
+router.delete("/:id", PostController.deletePost);
 
-router.put("/edit/:id", upload.single("image"), PostController.updatePost);
+router.put("/", upload.single("image"), PostController.updatePost);
 
 module.exports = router;

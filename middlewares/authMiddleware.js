@@ -6,6 +6,9 @@ const { User } = require("../models/User");
 const isLoggedIn = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
+    if (authHeader === "Bearer null")
+      return res.status(404).send("Haven't logged in yet !!!");
+
     const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) return res.status(400).send("Haven't logged in yet !!!");
@@ -16,11 +19,7 @@ const isLoggedIn = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log(
-      "🚀 ~ file: authMiddleware.js ~ line 14 ~ isLoggedIn ~ error",
-      error
-    );
-
+    console.log("🚀 ~ file: authMiddleware.js:20 ~ isLoggedIn ~ error:", error);
     return res.sendStatus(500);
   }
 };

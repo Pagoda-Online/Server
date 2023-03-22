@@ -57,7 +57,7 @@ router.get("/", RegisterCourseController.getAllRegisterCourses);
  *                    type: number
  */
 
-router.get("/:id", RegisterCourseController.getRegisterCourse);
+router.get("/:id", RegisterCourseController.checkRegister);
 
 router.post("/", RegisterCourseController.createRegisterCourse);
 

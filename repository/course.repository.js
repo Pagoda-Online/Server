@@ -1,9 +1,28 @@
 const CourseModel = require("../models/Course");
+const RegisterCourseModel = require("../models/RegisterCourse");
 
 const findAllCourse = async (UserId) => {
   try {
     const courses = await CourseModel.find({ UserId: UserId }).populate(
       "UserId"
+    );
+    return courses;
+  } catch (error) {
+    console.log(
+      "🚀 ~ file: CourseRepository.js ~ line 25 ~ findAll ~ error",
+      error
+    );
+  }
+};
+
+const findAllRegisteredCourse = async (UserId) => {
+  try {
+    const courses = await RegisterCourseModel.find({ UserId: UserId }).populate(
+      "idCourse"
+    );
+    console.log(
+      "🚀 ~ file: course.repository.js:23 ~ findAllRegisteredCourse ~ courses:",
+      courses
     );
     return courses;
   } catch (error) {
@@ -78,4 +97,5 @@ module.exports = {
   deleteCourseById,
   updateCourseById,
   getAllCoursesForAdmin,
+  findAllRegisteredCourse,
 };

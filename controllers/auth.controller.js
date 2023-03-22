@@ -108,6 +108,9 @@ const login = async (req, res, next) => {
     // const { _id: UserId, email: userEmail, role, fullname } = foundUser;
 
     // const payload = { _id: UserId, email: userEmail, role, fullname };
+    const urlAvatar = foundUser.UrlImagePath;
+
+    const nameUser = foundUser.fullname;
 
     const { _id: UserId, role } = foundUser;
 
@@ -119,9 +122,12 @@ const login = async (req, res, next) => {
     //   httpOnly: true,
     // });
 
-    return res
-      .status(200)
-      .send({ data: token, message: "logged in successfully" });
+    return res.status(200).send({
+      data: token,
+      nameUser,
+      imgAvatar: urlAvatar,
+      message: "logged in successfully",
+    });
   } catch (error) {
     console.log("🚀 ~ file: auth.controller.js:109 ~ login ~ error:", error);
     return res.status(500).send({ message: "Internal Server Error" });

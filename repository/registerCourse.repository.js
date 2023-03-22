@@ -36,9 +36,12 @@ const createRegisterCourse = async (data) => {
   }
 };
 
-const deleteRegisterCourseById = async (id) => {
+const deleteRegisterCourseById = async (UserId, id) => {
   try {
-    const RegisterCourse = await RegisterCourseModel.deleteMany({ _id: id });
+    const RegisterCourse = await RegisterCourseModel.deleteMany({
+      UserId: UserId,
+      idCourse: id,
+    });
     return RegisterCourse;
   } catch (error) {
     console.log(
@@ -57,10 +60,23 @@ const updateRegisterCourseById = async (id, data) => {
   }
 };
 
+const checkRegister = async (UserId, CourseId) => {
+  try {
+    const registerEvents = await RegisterCourseModel.findOne({
+      UserId: UserId,
+      idCourse: CourseId,
+    });
+    return registerEvents;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   findAllRegisterCourse,
   findRegisterCourseById,
   createRegisterCourse,
   deleteRegisterCourseById,
   updateRegisterCourseById,
+  checkRegister,
 };
