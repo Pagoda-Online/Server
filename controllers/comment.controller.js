@@ -1,5 +1,38 @@
 const CommentRepository = require("../repository/comment.repository");
 const { decodeToken } = require("../utils/jwt");
+const NotificationRepository = require("../repository/notification.repository");
+const PostRepository = require("../repository/post.repository");
+
+const createComment = async (req, res, next) => {
+  try {
+    // GET : req.params, req.query
+    if (!req.body) return res.sendStatus(400);
+
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
+    req.body.UserId = payload._id;
+
+    const comment = await CommentRepository.createComment(req.body);
+
+    if (!comment) return res.sendStatus(500);
+
+    // create notification
+    const postOwnerId = await PostRepository.findPostById(req.body.PostId);
+
+    const notification = await NotificationRepository.createNotification({
+      userCommentId: payload._id,
+      userId: postOwnerId.UserId,
+      postId: req.body.PostId,
+      commentId: comment._id,
+      isRead: false,
+    });
+
+    return res.status(200).send(comment);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
 
 const getAllComments = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -27,25 +60,25 @@ const getComment = async (req, res, next) => {
   res.send(Comment);
 };
 
-const createComment = async (req, res, next) => {
-  try {
-    // GET : req.params, req.query
-    if (!req.body) return res.sendStatus(400);
+// const createComment = async (req, res, next) => {
+//   try {
+//     // GET : req.params, req.query
+//     if (!req.body) return res.sendStatus(400);
 
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(" ")[1];
-    const payload = decodeToken(token);
-    req.body.UserId = payload._id;
+//     const authHeader = req.headers.authorization;
+//     const token = authHeader && authHeader.split(" ")[1];
+//     const payload = decodeToken(token);
+//     req.body.UserId = payload._id;
 
-    const Comment = await CommentRepository.createComment(req.body);
+//     const Comment = await CommentRepository.createComment(req.body);
 
-    if (!Comment) return res.sendStatus(500);
+//     if (!Comment) return res.sendStatus(500);
 
-    return res.status(200).send(Comment);
-  } catch (error) {
-    res.sendStatus(500);
-  }
-};
+//     return res.status(200).send(Comment);
+//   } catch (error) {
+//     res.sendStatus(500);
+//   }
+// };
 
 const deleteComment = async (req, res, next) => {
   try {

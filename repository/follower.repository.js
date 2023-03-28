@@ -21,10 +21,7 @@ const findAllFollowing = async (UserId) => {
     }).populate("userFollowed_id");
     return Followers;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: FollowerRepository.js ~ line 25 ~ findAll ~ error",
-      error
-    );
+    return error;
   }
 };
 

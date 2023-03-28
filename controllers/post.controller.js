@@ -50,9 +50,12 @@ const getAllPostsForAdmin = async (req, res, next) => {
 
 const getPost = async (req, res, next) => {
   try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
     const id = req.params.id;
 
-    const Post = await PostRepository.getPostById(id);
+    const Post = await PostRepository.findPostById(id);
 
     if (!Post) res.sendStatus(400);
 

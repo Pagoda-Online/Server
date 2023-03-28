@@ -25,6 +25,7 @@ var AdminRouter = require("./routes/api/admin");
 var EventRouter = require("./routes/api/event");
 var CourseRouter = require("./routes/api/course");
 var UserRouter = require("./routes/api/users");
+var NotificationRouter = require("./routes/api/notification");
 
 const {
   isLoggedIn,
@@ -81,6 +82,7 @@ app.use("/donates", isLoggedIn, donateRouter);
 app.use("/event-registration", isLoggedIn, registerEventRouter);
 app.use("/course-registration", isLoggedIn, registerCourseRouter);
 app.use("/posts", isLoggedIn, postRouter);
+
 app.use("/follow", isLoggedIn, FollowerRouter);
 app.use("/comments", isLoggedIn, commentRouter);
 app.use("/admin", isLoggedIn, isAdmin, AdminRouter);
@@ -88,9 +90,10 @@ app.use("/staff", isLoggedIn, isStaff, StaffRouter);
 
 app.use("/courses", isLoggedIn, CourseRouter);
 app.use("/events", isLoggedIn, EventRouter);
-app.use("/post", isLoggedIn, postRouter);
 
-app.use("/users", UserRouter);
+app.use("/users", isLoggedIn, UserRouter);
+
+app.use("/notification", NotificationRouter);
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

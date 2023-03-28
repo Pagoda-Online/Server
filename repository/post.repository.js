@@ -8,10 +8,7 @@ const findAllPost = async (UserId) => {
       .populate("UserId");
     return Posts;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: PostRepository.js ~ line 25 ~ findAll ~ error",
-      error
-    );
+    return error.message;
   }
 };
 
@@ -27,7 +24,9 @@ const findAllPostOfFollower = async (UserId) => {
 
     const posts = await PostModel.find({
       UserId: { $in: followedUserIds },
-    }).populate("UserId");
+    })
+      .populate("UserId")
+      .sort({ createdAt: -1 });
 
     return posts; // các bài post của người đang follow
   } catch (error) {
@@ -40,22 +39,16 @@ const getAllPostsForAdmin = async () => {
     const Posts = await PostModel.find().populate("UserId");
     return Posts;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: PostRepository.js ~ line 25 ~ findAll ~ error",
-      error
-    );
+    return error.message;
   }
 };
 
 const findPostById = async (id) => {
   try {
-    const Post = await PostModel.findById(id);
+    const Post = await PostModel.findById(id).populate("UserId");
     return Post;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: PostRepository.js ~ line 33 ~ findPostById ~ error",
-      error
-    );
+    return error.message;
   }
 };
 
@@ -64,10 +57,7 @@ const createPost = async (data) => {
     const Post = await PostModel.create(data);
     return Post;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: PostRepository.js ~ line 31 ~ createPost ~ error",
-      error
-    );
+    return error.message;
   }
 };
 
@@ -76,10 +66,7 @@ const deletePostById = async (id) => {
     const Post = await PostModel.deleteMany({ _id: id });
     return Post;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: PostRepository.js ~ line 33 ~ findPostById ~ error",
-      error
-    );
+    return error.message;
   }
 };
 
