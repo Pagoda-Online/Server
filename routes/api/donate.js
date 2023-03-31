@@ -57,9 +57,11 @@ router.get("/", DonateController.getAllDonates);
  *                    type: number
  */
 
-router.get("/received", DonateController.getAllDonatesReceive);
+router.get("/donateHistoryReceived", DonateController.getAllDonatesReceive);
 
-router.post("/", DonateController.createDonate);
+router.get("/donateHistorySended", DonateController.getAllDonatesSend);
+
+router.post("/:userReceive", DonateController.createDonate);
 
 router.get("/:id", DonateController.getDonate);
 

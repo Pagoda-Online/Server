@@ -69,4 +69,6 @@ router.delete("/:id", PostController.deletePost);
 
 router.put("/", upload.single("image"), PostController.updatePost);
 
+router.post("/:id/like", PostController.like);
+
 module.exports = router;

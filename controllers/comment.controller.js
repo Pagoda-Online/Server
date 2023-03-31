@@ -25,6 +25,7 @@ const createComment = async (req, res, next) => {
       userId: postOwnerId.UserId,
       postId: req.body.PostId,
       commentId: comment._id,
+      message: comment.Content,
       isRead: false,
     });
 

@@ -20,9 +20,9 @@ const getNotification = async (req, res, next) => {
 
 const readById = async (req, res, next) => {
   try {
-    // const authHeader = req.headers.authorization;
-    // const token = authHeader && authHeader.split(" ")[1];
-    // const payload = decodeToken(token);
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
     // const UserId = payload._id;
     const { id } = req.params;
 
@@ -38,11 +38,11 @@ const readById = async (req, res, next) => {
 
 const readAll = async (req, res, next) => {
   try {
-    // const authHeader = req.headers.authorization;
-    // const token = authHeader && authHeader.split(" ")[1];
-    // const payload = decodeToken(token);
-    // const UserId = payload._id;
-    const UserId = "6403990fbb75a53ed142763a";
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
+    const UserId = payload._id;
+    // const UserId = "6403990fbb75a53ed142763a";
 
     const readAll = await NotificationRepository.readAllNotificationsByUser(
       UserId

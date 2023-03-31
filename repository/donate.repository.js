@@ -24,6 +24,18 @@ const findAllDonateReceive = async (UserId) => {
   }
 };
 
+const findAllDonateSend = async (UserId) => {
+  try {
+    const donates = await DonateModel.find({ UserId: UserId });
+    return donates;
+  } catch (error) {
+    console.log(
+      "🚀 ~ file: DonateRepository.js ~ line 25 ~ findAll ~ error",
+      error
+    );
+  }
+};
+
 const findDonateById = async (id) => {
   try {
     const Donate = await DonateModel.findById(id);
@@ -53,4 +65,5 @@ module.exports = {
   findDonateById,
   createDonate,
   findAllDonateReceive,
+  findAllDonateSend,
 };

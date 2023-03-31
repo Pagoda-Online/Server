@@ -9,7 +9,7 @@ const PostSchema = new Schema(
     // PostTitle: String,
     PostDesc: String,
     UrlImagePath: { type: String, default: "null" },
-    CountLike: { type: Number, default: 0 },
+    likeCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

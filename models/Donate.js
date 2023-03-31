@@ -7,7 +7,8 @@ const DonateSchema = new Schema(
   {
     UserId: { type: mongoose.Types.ObjectId, ref: "User" },
     UserReceive: { type: mongoose.Types.ObjectId, ref: "User" },
-    DonateMoney: Number,
+    paymentId: String,
+    Amount: Number,
     Description: String,
   },
   { timestamps: true }

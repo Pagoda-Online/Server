@@ -9,6 +9,7 @@ const NotificationSchema = new Schema(
     userCommentId: { type: mongoose.Types.ObjectId, ref: "User" },
     postId: { type: mongoose.Types.ObjectId, ref: "Post" },
     commentId: { type: mongoose.Types.ObjectId, ref: "Comment" },
+    message: String,
     isRead: { type: Boolean, default: false },
   },
   { timestamps: true }
