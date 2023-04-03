@@ -8,10 +8,7 @@ const findAllCourse = async (UserId) => {
     );
     return courses;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: CourseRepository.js ~ line 25 ~ findAll ~ error",
-      error
-    );
+    return error.message;
   }
 };
 
@@ -20,16 +17,9 @@ const findAllRegisteredCourse = async (UserId) => {
     const courses = await RegisterCourseModel.find({ UserId: UserId }).populate(
       "idCourse"
     );
-    console.log(
-      "🚀 ~ file: course.repository.js:23 ~ findAllRegisteredCourse ~ courses:",
-      courses
-    );
     return courses;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: CourseRepository.js ~ line 25 ~ findAll ~ error",
-      error
-    );
+    return error.message;
   }
 };
 
@@ -38,10 +28,7 @@ const getAllCoursesForAdmin = async () => {
     const courses = await CourseModel.find().populate("UserId");
     return courses;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: CourseRepository.js ~ line 25 ~ findAll ~ error",
-      error
-    );
+    return error.message;
   }
 };
 
@@ -50,10 +37,7 @@ const findCourseById = async (id) => {
     const Course = await CourseModel.findById(id);
     return Course;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: CourseRepository.js ~ line 33 ~ findCourseById ~ error",
-      error
-    );
+    return error.message;
   }
 };
 
@@ -62,10 +46,7 @@ const createCourse = async (data) => {
     const Course = await CourseModel.create(data);
     return Course;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: CourseRepository.js ~ line 31 ~ createCourse ~ error",
-      error
-    );
+    return error.message;
   }
 };
 
@@ -74,10 +55,7 @@ const deleteCourseById = async (id) => {
     const Course = await CourseModel.deleteMany({ _id: id });
     return Course;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: CourseRepository.js ~ line 33 ~ findCourseById ~ error",
-      error
-    );
+    return error.message;
   }
 };
 

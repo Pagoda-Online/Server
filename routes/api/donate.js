@@ -61,6 +61,10 @@ router.get("/donateHistoryReceived", DonateController.getAllDonatesReceive);
 
 router.get("/donateHistorySended", DonateController.getAllDonatesSend);
 
+router.get("/donateStatisticsReceived", DonateController.getStatisticsReceive);
+
+router.get("/donateStatisticsSended", DonateController.getStatisticsSend);
+
 router.post("/:userReceive", DonateController.createDonate);
 
 router.get("/:id", DonateController.getDonate);

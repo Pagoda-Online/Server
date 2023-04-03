@@ -3,11 +3,7 @@ const { decodeToken } = require("../utils/jwt");
 const stripe = require("stripe")(process.env.STRIPE_S_KEY);
 
 const getAllDonates = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(" ")[1];
-  const payload = decodeToken(token);
-
-  const Donates = await DonateRepository.findAllDonate(payload._id);
+  const Donates = await DonateRepository.findAllDonate();
   res.send(Donates);
 };
 
@@ -16,6 +12,7 @@ const getAllDonatesReceive = async (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
   const UserId = payload._id;
+  // const UserId = "6407f573cd00bfcdcca2d7ed";
 
   const Donates = await DonateRepository.findAllDonateReceive(UserId);
   res.send(Donates);
@@ -26,9 +23,43 @@ const getAllDonatesSend = async (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
   const payload = decodeToken(token);
   const UserId = payload._id;
+  // const UserId = "6407f573cd00bfcdcca2d7ed";
 
   const Donates = await DonateRepository.findAllDonateSend(UserId);
   res.send(Donates);
+};
+
+const getStatisticsReceive = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
+  const payload = decodeToken(token);
+  const UserId = payload._id;
+  // const UserId = "6407f573cd00bfcdcca2d7ed";
+
+  const Donates = await DonateRepository.findStatisticsReceive(UserId);
+  const totalAmountOFYear = Donates.reduce(
+    (acc, curr) => acc + curr.totalAmount,
+    0
+  );
+
+  res.send({ Donates, totalAmountOFYear });
+};
+
+const getStatisticsSend = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
+  const payload = decodeToken(token);
+  const UserId = payload._id;
+  // const UserId = "6407f573cd00bfcdcca2d7ed";
+
+  const Donates = await DonateRepository.findAllStatisticsSend(UserId);
+
+  const totalAmountOFYear = Donates.reduce(
+    (acc, curr) => acc + curr.totalAmount,
+    0
+  );
+
+  res.send({ Donates, totalAmountOFYear });
 };
 
 const getDonate = async (req, res, next) => {
@@ -102,4 +133,6 @@ module.exports = {
   createDonate,
   getAllDonatesSend,
   getAllDonatesReceive,
+  getStatisticsSend,
+  getStatisticsReceive,
 };

@@ -78,8 +78,8 @@ const swaggerSpec = swaggerJSDoc(options);
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 
-// app.use("/donates", isLoggedIn, donateRouter);
-app.use("/donates", donateRouter);
+app.use("/donates", isLoggedIn, donateRouter);
+// app.use("/donates", donateRouter);
 app.use("/event-registration", isLoggedIn, registerEventRouter);
 app.use("/course-registration", isLoggedIn, registerCourseRouter);
 app.use("/posts", isLoggedIn, postRouter);
