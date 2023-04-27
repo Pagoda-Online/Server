@@ -6,8 +6,6 @@ var logger = require("morgan");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
-const { OAuth2Client } = require("google-auth-library");
-const { google } = require("googleapis");
 
 const database = require("./database/connect");
 
@@ -79,7 +77,6 @@ app.use("/", indexRouter);
 app.use("/auth", authRouter);
 
 app.use("/donates", isLoggedIn, donateRouter);
-// app.use("/donates", donateRouter);
 app.use("/event-registration", isLoggedIn, registerEventRouter);
 app.use("/course-registration", isLoggedIn, registerCourseRouter);
 app.use("/posts", isLoggedIn, postRouter);

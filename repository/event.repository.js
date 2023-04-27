@@ -6,10 +6,7 @@ const findAllEvent = async (UserId) => {
     const events = await EventModel.find({ UserId: UserId }).populate("UserId");
     return events;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: EventRepository.js ~ line 25 ~ findAll ~ error",
-      error
-    );
+    return error;
   }
 };
 
@@ -20,26 +17,16 @@ const findAllRegisteredEvent = async (UserId) => {
     }).populate("idEvent");
     return events;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: EventRepository.js ~ line 25 ~ findAll ~ error",
-      error
-    );
+    return error;
   }
 };
 
 const getAllEventsForAdmin = async () => {
   try {
     const events = await EventModel.find().populate("UserId");
-    console.log(
-      "🚀 ~ file: event.repository.js:18 ~ getAllEventsForAdmin ~ events:",
-      events
-    );
     return events;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: EventRepository.js ~ line 25 ~ findAll ~ error",
-      error
-    );
+    return error;
   }
 };
 
@@ -48,10 +35,7 @@ const findEventById = async (id) => {
     const Event = await EventModel.findById(id);
     return Event;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: EventRepository.js ~ line 33 ~ findEventById ~ error",
-      error
-    );
+    return error;
   }
 };
 
@@ -60,10 +44,7 @@ const createEvent = async (data) => {
     const Event = await EventModel.create(data);
     return Event;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: EventRepository.js ~ line 31 ~ createEvent ~ error",
-      error
-    );
+    return error;
   }
 };
 
@@ -72,10 +53,7 @@ const deleteEventById = async (id) => {
     const Event = await EventModel.deleteMany({ _id: id });
     return Event;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: EventRepository.js ~ line 33 ~ findEventById ~ error",
-      error
-    );
+    return error;
   }
 };
 

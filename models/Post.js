@@ -6,8 +6,7 @@ const { Schema } = mongoose;
 const PostSchema = new Schema(
   {
     UserId: { type: mongoose.Types.ObjectId, ref: "User" },
-    // PostTitle: String,
-    PostDesc: String,
+    PostDesc: { type: String, default: "null" },
     UrlImagePath: { type: String, default: "null" },
     likeCount: { type: Number, default: 0 },
   },

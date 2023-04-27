@@ -19,7 +19,6 @@ const isLoggedIn = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log("🚀 ~ file: authMiddleware.js:20 ~ isLoggedIn ~ error:", error);
     return res.sendStatus(500);
   }
 };

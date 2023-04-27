@@ -68,17 +68,11 @@ const getCourse = async (req, res, next) => {
 const createCourse = async (req, res, next) => {
   try {
     const { file } = req;
-    console.log(
-      "🚀 ~ file: course.controller.js:36 ~ createCourse ~ file:",
-      req.body
-    );
+
     // if (!file) throw new ErrorHandler(400, "Image is required");
 
     const fileFormat = file.mimetype.split("/")[1];
-    console.log(
-      "🚀 ~ file: course.controller.js:43 ~ createCourse ~ fileFormat:",
-      fileFormat
-    );
+
     const { base64 } = bufferToDataURI(fileFormat, file.buffer);
 
     const imageDetails = await uploadToCloudinary(base64, fileFormat);
