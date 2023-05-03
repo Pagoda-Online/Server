@@ -6,10 +6,9 @@ const { Schema } = mongoose;
 const PostSchema = new Schema(
   {
     UserId: { type: mongoose.Types.ObjectId, ref: "User" },
-    PostTitle: String,
-    PostDesc: String,
-    UrlImagePath: String,
-    UrlFileAttach: String,
+    PostDesc: { type: String, default: "null" },
+    UrlImagePath: { type: String, default: "null" },
+    likeCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
@@ -17,6 +16,6 @@ const PostSchema = new Schema(
 PostSchema.plugin(mongoosePaginate);
 
 // tạo model
-const Post = mongoose.model("Role", PostSchema);
+const Post = mongoose.model("Post", PostSchema);
 
 module.exports = Post;

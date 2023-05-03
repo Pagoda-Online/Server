@@ -1,66 +1,80 @@
-const CommentServices = require("../services/comment.service");
+const CommentRepository = require("../repository/comment.repository");
 const { decodeToken } = require("../utils/jwt");
-
-const getAllComments = async (req, res, next) => {
-  const token = req.cookies.access_token || req.headers.access_token;
-  const payload = decodeToken(token);
-
-  const Comments = await CommentServices.getAllComments(payload._id);
-  res.send(Comments);
-};
-
-const getComment = async (req, res, next) => {
-  const id = req.params.id;
-
-  const Comment = await CommentServices.getCommentById(id);
-
-  if (!Comment) res.sendStatus(400);
-
-  console.log("🚀 ~ file: Comment.js ~ line 16 ~ Comment", Comment);
-
-  res.send(Comment);
-};
+const NotificationRepository = require("../repository/notification.repository");
+const PostRepository = require("../repository/post.repository");
 
 const createComment = async (req, res, next) => {
   try {
     // GET : req.params, req.query
     if (!req.body) return res.sendStatus(400);
 
-    const token = req.cookies.access_token || req.headers.access_token;
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
     const payload = decodeToken(token);
     req.body.UserId = payload._id;
 
-    const Comment = await CommentServices.createComment(req.body);
+    const comment = await CommentRepository.createComment(req.body);
 
-    if (!Comment) return res.sendStatus(500);
+    if (!comment) return res.sendStatus(500);
 
-    return res.status(200).send(Comment);
+    // create notification
+    const postOwnerId = await PostRepository.findPostById(req.body.PostId);
+
+    const notification = await NotificationRepository.createNotification({
+      userCommentId: payload._id,
+      userId: postOwnerId.UserId,
+      postId: req.body.PostId,
+      commentId: comment._id,
+      message: comment.Content,
+      isRead: false,
+    });
+
+    return res.status(200).send(comment);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: CommentController.js ~ line 32 ~ createComment ~ error",
-      error
-    );
     res.sendStatus(500);
   }
 };
 
+const getAllComments = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
+  if (!token) return res.status(401);
+
+  const Comments = await CommentRepository.findAllComment(req.query.PostId);
+  res.send(Comments);
+};
+
+const getComment = async (req, res, next) => {
+  const id = req.params.id;
+  const Comment = await CommentRepository.getCommentById(id);
+  if (!Comment) res.sendStatus(400);
+  console.log("🚀 ~ file: Comment.js ~ line 16 ~ Comment", Comment);
+  res.send(Comment);
+};
+
 const deleteComment = async (req, res, next) => {
   try {
-    // DELETE : req.params, req.query
-    if (!req.params.id) return res.sendStatus(400);
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
+    const userId = payload._id;
 
-    const Comment = await CommentServices.deleteCommentById(req.params.id);
+    const findComment = await CommentRepository.findCommentById(req.params.id);
 
-    if (!Comment) return res.sendStatus(500);
+    const findPost = await PostRepository.findPostById(findComment.PostId);
+
+    if (
+      findPost.UserId.toString() !== userId.toString() &&
+      findComment.UserId.toString() !== userId.toString()
+    ) {
+      return res.sendStatus(400);
+    }
+
+    const Comment = await CommentRepository.deleteCommentById(req.params.id);
 
     return res.status(200).send(Comment);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: follower.controller.js:52 ~ deleteComment ~ error",
-      error
-    );
-
-    res.sendStatus(500);
+    return res.sendStatus(500);
   }
 };
 
@@ -69,7 +83,7 @@ const updateComment = async (req, res, next) => {
     // UPDATE : req.params, req.query
     if (!req.params.id && req.body) return res.sendStatus(400);
 
-    const Comment = await CommentServices.updateCommentById(
+    const Comment = await CommentRepository.updateCommentById(
       { _id: req.params.id },
       { $set: req.body }
     );
@@ -78,11 +92,6 @@ const updateComment = async (req, res, next) => {
 
     return res.status(200).send(Comment);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: follower.controller.js:75 ~ updateComment ~ error",
-      error
-    );
-
     res.sendStatus(500);
   }
 };

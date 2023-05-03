@@ -1,14 +1,13 @@
 const CommentModel = require("../models/Comment");
 
-const findAllComment = async (UserId) => {
+const findAllComment = async (PostId) => {
   try {
-    const Comments = await CommentModel.find({ UserId: UserId });
+    const Comments = await CommentModel.find({ PostId: PostId }).populate(
+      "UserId"
+    );
     return Comments;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: CommentRepository.js ~ line 25 ~ findAll ~ error",
-      error
-    );
+    return error;
   }
 };
 
@@ -17,10 +16,7 @@ const findCommentById = async (id) => {
     const Comment = await CommentModel.findById(id);
     return Comment;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: CommentRepository.js ~ line 33 ~ findCommentById ~ error",
-      error
-    );
+    return error;
   }
 };
 
@@ -29,10 +25,7 @@ const createComment = async (data) => {
     const Comment = await CommentModel.create(data);
     return Comment;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: CommentRepository.js ~ line 31 ~ createComment ~ error",
-      error
-    );
+    return error;
   }
 };
 
@@ -41,10 +34,7 @@ const deleteCommentById = async (id) => {
     const Comment = await CommentModel.deleteMany({ _id: id });
     return Comment;
   } catch (error) {
-    console.log(
-      "🚀 ~ file: CommentRepository.js ~ line 33 ~ findCommentById ~ error",
-      error
-    );
+    return error;
   }
 };
 

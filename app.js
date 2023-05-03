@@ -6,8 +6,6 @@ var logger = require("morgan");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
-const { OAuth2Client } = require("google-auth-library");
-const { google } = require("googleapis");
 
 const database = require("./database/connect");
 
@@ -21,6 +19,11 @@ var commentRouter = require("./routes/api/comment");
 var FollowerRouter = require("./routes/api/follower");
 var StaffRouter = require("./routes/api/staff");
 var AdminRouter = require("./routes/api/admin");
+
+var EventRouter = require("./routes/api/event");
+var CourseRouter = require("./routes/api/course");
+var UserRouter = require("./routes/api/users");
+var NotificationRouter = require("./routes/api/notification");
 
 const {
   isLoggedIn,
@@ -72,16 +75,23 @@ const swaggerSpec = swaggerJSDoc(options);
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
+
 app.use("/donates", isLoggedIn, donateRouter);
-app.use("/register-event", isLoggedIn, registerEventRouter);
-app.use("/register-course", isLoggedIn, registerCourseRouter);
+app.use("/event-registration", isLoggedIn, registerEventRouter);
+app.use("/course-registration", isLoggedIn, registerCourseRouter);
 app.use("/posts", isLoggedIn, postRouter);
-app.use("/followers", isLoggedIn, FollowerRouter);
+
+app.use("/follow", isLoggedIn, FollowerRouter);
 app.use("/comments", isLoggedIn, commentRouter);
-
 app.use("/admin", isLoggedIn, isAdmin, AdminRouter);
-
 app.use("/staff", isLoggedIn, isStaff, StaffRouter);
+
+app.use("/courses", isLoggedIn, CourseRouter);
+app.use("/events", isLoggedIn, EventRouter);
+
+app.use("/users", isLoggedIn, UserRouter);
+
+app.use("/notification", isLoggedIn, NotificationRouter);
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

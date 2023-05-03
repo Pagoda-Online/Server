@@ -8,11 +8,12 @@ const EventSchema = new Schema(
     UserId: { type: mongoose.Types.ObjectId, ref: "User" },
     Title: String,
     Description: String,
-    UrlFileImage: String,
-    UrlFileAttach: String,
-    UrlVideo: String,
-    Start_Date: Date,
-    End_Date: Date,
+    UrlImagePath: { type: String, default: "null" },
+    Start_Date: { type: Date, default: Date.now() },
+    End_Date: {
+      type: Date,
+      default: new Date("3000-01-01T00:00:00.000Z"),
+    },
   },
   { timestamps: true }
 );

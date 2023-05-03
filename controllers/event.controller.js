@@ -1,49 +1,91 @@
-const EventServices = require("../services/event.service");
+const EventRepository = require("../repository/event.repository");
 const { decodeToken } = require("../utils/jwt");
+const { uploadToCloudinary } = require("../services/upload.service");
+const { ErrorHandler } = require("../utils/errorHandler");
+const { bufferToDataURI } = require("../utils/file");
 
 const getAllEvents = async (req, res, next) => {
-  const token = req.cookies.access_token || req.headers.access_token;
-  const payload = decodeToken(token);
-  const Events = await EventServices.getAllEvents(payload._id);
-  res.send(Events);
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
+    const Events = await EventRepository.findAllEvent(payload._id);
+    res.send(Events);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
+
+const getAllRegisteredEvent = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const payload = decodeToken(token);
+    const Events = await EventRepository.findAllRegisteredEvent(payload._id);
+    res.send(Events);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const getAllEventsForAdmin = async (req, res, next) => {
-  const Events = await EventServices.getAllEventsForAdmin();
-  res.send(Events);
+  try {
+    const Events = await EventRepository.getAllEventsForAdmin();
+    res.send(Events);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const getEvent = async (req, res, next) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
 
-  const Event = await EventServices.getEventById(id);
+    const Event = await EventRepository.findEventById(id);
 
-  if (!Event) res.sendStatus(400);
+    if (!Event) res.sendStatus(400);
 
-  console.log("🚀 ~ file: Event.js ~ line 16 ~ Event", Event);
+    res.send(Event);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
 
-  res.send(Event);
+const getAllEventsByUserId = async (req, res, next) => {
+  try {
+    const userId = req.params.UserId;
+    const Events = await EventRepository.findAllEvent(userId);
+    res.send(Events);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const createEvent = async (req, res, next) => {
   try {
+    const { file } = req;
+    // if (!file) throw new ErrorHandler(400, "Image is required");
+
+    const fileFormat = file.mimetype.split("/")[1];
+    const { base64 } = bufferToDataURI(fileFormat, file.buffer);
+
+    const imageDetails = await uploadToCloudinary(base64, fileFormat);
+
+    req.body.UrlImagePath = imageDetails.url;
     // GET : req.params, req.query
     if (!req.body) return res.sendStatus(400);
 
-    const token = req.cookies.access_token || req.headers.access_token;
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
     const payload = decodeToken(token);
     req.body.UserId = payload._id;
 
-    const Event = await EventServices.createEvent(req.body);
+    const Event = await EventRepository.createEvent(req.body);
 
     if (!Event) return res.sendStatus(500);
 
     return res.status(200).send(Event);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: EventController.js ~ line 32 ~ createEvent ~ error",
-      error
-    );
     res.sendStatus(500);
   }
 };
@@ -53,27 +95,31 @@ const deleteEvent = async (req, res, next) => {
     // DELETE : req.params, req.query
     if (!req.params.id) return res.sendStatus(400);
 
-    const Event = await EventServices.deleteEventById(req.params.id);
+    const Event = await EventRepository.deleteEventById(req.params.id);
 
     if (!Event) return res.sendStatus(500);
 
     return res.status(200).send(Event);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: Event.controller.js:52 ~ deleteEvent ~ error",
-      error
-    );
-
     res.sendStatus(500);
   }
 };
 
 const updateEvent = async (req, res, next) => {
   try {
+    // const { file } = req;
+    // // if (!file) throw new ErrorHandler(400, "Image is required");
+
+    // const fileFormat = file.mimetype.split("/")[1];
+    // const { base64 } = bufferToDataURI(fileFormat, file.buffer);
+
+    // const imageDetails = await uploadToCloudinary(base64, fileFormat);
+
+    // req.body.UrlImagePath = imageDetails.url;
     // UPDATE : req.params, req.query
     if (!req.params.id && req.body) return res.sendStatus(400);
 
-    const Event = await EventServices.updateEventById(
+    const Event = await EventRepository.updateEventById(
       { _id: req.params.id },
       { $set: req.body }
     );
@@ -82,11 +128,6 @@ const updateEvent = async (req, res, next) => {
 
     return res.status(200).send(Event);
   } catch (error) {
-    console.log(
-      "🚀 ~ file: Event.controller.js:75 ~ updateEvent ~ error",
-      error
-    );
-
     res.sendStatus(500);
   }
 };
@@ -98,4 +139,6 @@ module.exports = {
   deleteEvent,
   updateEvent,
   getAllEventsForAdmin,
+  getAllEventsByUserId,
+  getAllRegisteredEvent,
 };

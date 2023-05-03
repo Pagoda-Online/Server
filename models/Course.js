@@ -8,9 +8,8 @@ const CourseSchema = new Schema(
     UserId: { type: mongoose.Types.ObjectId, ref: "User" },
     title: String,
     Description: String,
-    UrlFileImage: String,
-    UrlFileAttach: String,
-    UrlVideo: String,
+    UrlImagePath: { type: String, default: "null" },
+    UrlVideoPath: { type: String, default: "null" },
   },
   { timestamps: true }
 );

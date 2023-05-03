@@ -28,16 +28,20 @@ const register = async (req, res) => {
 
     if (!newUser) return res.status(500).send("Internal server error");
 
+    res.send({
+      message:
+        "In a few minutes, an email will be sent to your account please verify",
+    });
+
     const otp = await new Otp({
       userId: newUser._id,
       VerificationCode: crypto.randomBytes(32).toString("hex"),
     }).save();
-    const url = `${process.env.BASE_URL}users/${newUser.id}/verify/${otp.VerificationCode}`;
+    const url = `${process.env.URL_SERVER}auth/${newUser.id}/verify/${otp.VerificationCode}`;
     await sendEmail(newUser.email, "Verify Email", url);
 
-    return res
-      .status(201)
-      .send({ message: "An Email sent to your account please verify" });
+    return res.status(201);
+    // .send({ message: "An Email sent to your account please verify" });
 
     // return res.status(200).send(newUser);
   } catch (error) {
@@ -58,12 +62,12 @@ const verify = async (req, res) => {
     });
     if (!otp) return res.status(400).send({ message: "Invalid link" });
 
-    await user.updateOne({ _id: user._id, verified: true });
+    await user.updateOne({ _id: user._id, isActive: true });
     await otp.remove();
 
-    res.status(200).send({ message: "Email verified successfully" });
+    res.status(200).redirect(`${process.env.BASE_URL}login`);
   } catch (error) {
-    res.status(500).send({ message: "Internal Server Error" });
+    res.status(500).send("NOT_FOUND");
   }
 };
 
@@ -85,7 +89,7 @@ const login = async (req, res, next) => {
     if (!isValidPassword)
       return res.status(401).send({ message: "Invalid Email or Password" });
 
-    if (!foundUser.verified) {
+    if (!foundUser.isActive) {
       const otp = await Otp.findOne({ userId: foundUser._id });
       if (!otp) {
         otp = await new Otp({
@@ -101,19 +105,29 @@ const login = async (req, res, next) => {
         .send({ message: "An Email sent to your account please verify" });
     }
 
-    const { _id: UserId, email: userEmail, role, fullname } = foundUser;
+    // const { _id: UserId, email: userEmail, role, fullname } = foundUser;
 
-    const payload = { _id: UserId, email: userEmail, role, fullname };
+    // const payload = { _id: UserId, email: userEmail, role, fullname };
+    const urlAvatar = foundUser.UrlImagePath;
+
+    const nameUser = foundUser.fullname;
+
+    const { _id: UserId, role } = foundUser;
+
+    const payload = { _id: UserId, role };
 
     const token = await createToken(payload);
 
-    res.cookie("access_token", token, {
-      httpOnly: true,
-    });
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    // });
 
-    return res
-      .status(200)
-      .send({ data: token, message: "logged in successfully" });
+    return res.status(200).send({
+      data: token,
+      nameUser,
+      imgAvatar: urlAvatar,
+      message: "logged in successfully",
+    });
   } catch (error) {
     console.log("🚀 ~ file: auth.controller.js:109 ~ login ~ error:", error);
     return res.status(500).send({ message: "Internal Server Error" });
@@ -135,6 +149,11 @@ const resetPassword = async (req, res) => {
         .status(409)
         .send({ message: "User with given email does not exist!" });
 
+    res.send({
+      message:
+        "Within minutes, a reset password link is sent to your email account",
+    });
+
     let otp = await Otp.findOne({ userId: user._id });
 
     if (!otp) {
@@ -147,9 +166,7 @@ const resetPassword = async (req, res) => {
     const url = `${process.env.BASE_URL}reset-password/${user._id}/${otp.VerificationCode}/`;
     await sendEmail(user.email, "Password Reset", url);
 
-    return res
-      .status(200)
-      .send({ message: "Password reset link sent to your email account" });
+    return res.status(200);
   } catch (error) {
     console.log(
       "🚀 ~ file: auth.controller.js:142 ~ resetPassword ~ error:",

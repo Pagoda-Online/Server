@@ -4,24 +4,35 @@ const UserController = require("../../controllers/user.controller");
 const PostController = require("../../controllers/post.controller");
 const EventController = require("../../controllers/event.controller");
 const CourseController = require("../../controllers/course.controller");
+const { upload } = require("../../services/upload.service");
 
 // ACCOUNTS ROUTERS
 router.get("/users/:id", UserController.getUserById);
 
 router.get("/users", UserController.getAllUser);
 
-router.post("/users/create", UserController.createAccount);
+router.put("/users/:id", UserController.updateAccount);
 
-router.put("/users/update/:id", UserController.updateAccount);
+router.delete("/users/:id", UserController.deleteAccount);
+
+router.post("/users/email", UserController.sendMail);
+
+router.put("/users/activation/:id", UserController.activeAccount);
+
+router.put("/users/deactivation/:id", UserController.inactiveAccount);
+
+// router.post("/users/email", UserController.sendMail);
 
 // POST ROUTERS
 router.get("/posts", PostController.getAllPostsForAdmin);
 
+// router.post("/posts", upload.single("image"), PostController.createPostAdmin);
+
 router.get("/posts/:id", PostController.getPost);
 
-router.delete("/posts/delete/:id", PostController.deletePost);
+router.delete("/posts/:id", PostController.deletePost);
 
-router.put("/posts/edit/:id", PostController.updatePost);
+router.put("/posts/:id", upload.single("image"), PostController.updatePost);
 
 // EVENTS ROUTERS
 
@@ -29,9 +40,9 @@ router.get("/events", EventController.getAllEventsForAdmin);
 
 router.get("/events/:id", EventController.getEvent);
 
-router.delete("/events/delete/:id", EventController.deleteEvent);
+router.delete("/events/:id", EventController.deleteEvent);
 
-router.put("/events/edit/:id", EventController.updateEvent);
+router.put("/events/:id", upload.single("image"), EventController.updateEvent);
 
 //COURSES ROUTERS
 
@@ -39,10 +50,14 @@ router.get("/courses", CourseController.getAllCoursesForAdmin);
 
 router.get("/courses/:id", CourseController.getCourse);
 
-router.post("/courses/create", CourseController.createCourse);
+router.post("/courses", upload.single("image"), CourseController.createCourse);
 
-router.delete("/courses/delete/:id", CourseController.deleteCourse);
+router.delete("/courses/:id", CourseController.deleteCourse);
 
-router.put("/courses/edit/:id", CourseController.updateCourse);
+router.put(
+  "/courses/:id",
+  upload.single("image"),
+  CourseController.updateCourse
+);
 
 module.exports = router;

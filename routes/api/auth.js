@@ -13,10 +13,10 @@ const {
 /* GET home page. */
 router.post("/register", register);
 
-router.get("/:id/verify/:VerificationCode/", verify);
+router.get("/:id/verify/:VerificationCode", verify);
 
 //send password reset link
-router.post("/reset-password", resetPassword);
+router.post("/forgot-password", resetPassword);
 // verify password reset link
 router.get("/reset-password/:id/:VerificationCode", resetPasswordVerification);
 //  set new password
