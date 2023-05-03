@@ -59,10 +59,21 @@ const deleteCourseById = async (id) => {
   }
 };
 
+// const updateCourseById = async (id, data) => {
+//   try {
+//     const Course = await CourseModel.updateMany(id, data);
+//     return Course;
+//   } catch (err) {
+//     return err;
+//   }
+// };
+
 const updateCourseById = async (id, data) => {
   try {
-    const Course = await CourseModel.updateMany(id, data);
-    return Course;
+    const updatedCourse = await CourseModel.findOneAndUpdate(id, data, {
+      new: true,
+    });
+    return updatedCourse;
   } catch (err) {
     return err;
   }

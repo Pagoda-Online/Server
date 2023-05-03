@@ -138,6 +138,10 @@ const updateCourse = async (req, res, next) => {
       { _id: req.params.id },
       { $set: req.body }
     );
+    console.log(
+      "🚀 ~ file: course.controller.js:141 ~ updateCourse ~ Course:",
+      Course
+    );
 
     if (!Course) return res.sendStatus(500);
 

@@ -59,7 +59,9 @@ const deleteEventById = async (id) => {
 
 const updateEventById = async (id, data) => {
   try {
-    const Event = await EventModel.updateMany(id, data);
+    const Event = await EventModel.findOneAndUpdate(id, data, {
+      new: true,
+    });
     return Event;
   } catch (err) {
     return err;
